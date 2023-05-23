@@ -17,6 +17,33 @@ function Chat(props){
         props.setIsConnected(false)
         setLogOut(true);
     }
+
+
+    async function getUsersWithToken() {
+        const token= props.token;
+        console.log("this is the token: ",token)
+        const url = 'http://localhost:5000/api/Chats';
+
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}` // Add the token as an 'Authorization' header
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('Users:', data);
+        } catch (error) {
+            console.error('Error:', error.message);
+        }
+    }
+    getUsersWithToken()
+
     const connectUser = {
         username: props.currentUser.username,
         password: props.currentUser.password,
@@ -37,6 +64,8 @@ function Chat(props){
 
     const addContact = (newContact) =>{
         setShowAlert(false);
+
+
         setContactsList([...contactsList, newContact]);
         setContact(newContact);
     };

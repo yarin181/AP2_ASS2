@@ -11,16 +11,18 @@ import React, {useState} from "react";
 
 function App(){
     const [usersList, setUsersList] = useState([]);
-    const [isConnected,setIsConnected]=useState(false)
+    const [isConnected,setIsConnected]=useState(true)
     const [currentUser, setCurrentUser]=useState({})
+    const [token,setToken]=useState('')
 
   return (
+
       <BrowserRouter>
           <GenericComponent />
           <Routes>
-              <Route path="/" element={ <Login usersList={usersList} setIsConnected={setIsConnected} setCurrentUser={setCurrentUser}/>} />
+              <Route path="/" element={ <Login setToken={setToken} usersList={usersList} setIsConnected={setIsConnected} setCurrentUser={setCurrentUser}/>} />
               <Route path="/registerPage" element={<RegisterPage />} />
-              <Route path="/chat" element={isConnected ? (<Chat currentUser={currentUser} setIsConnected={setIsConnected} />) :   (<Navigate to="/" replace={true} />) } />
+              <Route path="/chat" element={isConnected ? (<Chat token={token} currentUser={currentUser} setIsConnected={setIsConnected} />) :   (<Navigate to="/" replace={true} />) } />
           </Routes>
       </BrowserRouter>
 
