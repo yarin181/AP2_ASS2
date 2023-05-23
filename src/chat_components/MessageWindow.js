@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 function MessageWindow (props){
     const [messageContent, setMessageContent] = useState('');
     const [messages,setMessages]=useState({})
+    const [stam,setStam]=useState(0)
 
 
 
@@ -21,6 +22,7 @@ function MessageWindow (props){
         // const formatTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
         // const newMsg = {sender: true, content: messageContent,time: formatTime,date: formattedDate};
         props.addMessage(messageContent,props.contact.id);
+        // getMessages()
         // contact.chat.push(newMsg)
         setMessageContent('');
     };
@@ -60,7 +62,7 @@ function MessageWindow (props){
         return () => {
             // Cleanup code (if needed)
         };
-    }, []);
+    }, [props.contact]);
 
     return (
         <>
@@ -68,8 +70,8 @@ function MessageWindow (props){
             <div className="row" id="message_placeholder">
                 <div className="col col-md-12" id="message_container">
                     <div id="message-window">
-                        {props.contact ? props.contact.messages > 0 ? props.contact.messages.map((message, index) => (
-                            <Message key={index}  msg={message}/>
+                        {props.contact !== null ? messages.length > 0 ? messages.map((message, index) => (
+                            <Message key={index}  msg={message} side={message.sender.username === props.contact.username }/>
                         )): "" : ""}
                     </div>
                 </div>
