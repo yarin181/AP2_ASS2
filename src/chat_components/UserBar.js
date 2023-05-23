@@ -2,11 +2,10 @@ import robo5 from "../photos/robo5.jpg";
 function UserBar(props){
     // const {userInfo} = props;
     const handleClick = () => {
-        props.onItemClick(props.userInfo.user);
+        props.onItemClick(props.userInfo);
     };
-    console.log("user name : ",props.userInfo.user.displayName);
     return(
-         <a className={props.contact.username === props.userInfo.user.username ? "list-group-item list-group-item-action active" : "list-group-item list-group-item-action" } aria-current="true" onClick={handleClick}>
+         <a className={props.contact.id === props.userInfo.id ? "list-group-item list-group-item-action active" : "list-group-item list-group-item-action" } aria-current="true" onClick={handleClick}>
         <div className="grid-container user-bar">
             <div className="grid-item item1">
                 <img src={robo5} alt="User Photo" className="rounded-circle user-photo"/>

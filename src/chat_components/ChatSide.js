@@ -5,7 +5,7 @@ import MessageWindow from "./MessageWindow";
 import React from "react";
 
 
-function ChatSide({currentContact,addMessage}){
+function ChatSide({currentContact,addMessage,token}){
     return(
         <>
             <div className="row" id="chat-bar">
@@ -15,12 +15,12 @@ function ChatSide({currentContact,addMessage}){
                     </div>
                 </div>
                 <div id="connectName" className="col col-8">
-                    {currentContact.name}
+                    {currentContact.user.username}
                 </div>
 
         </div>
             <br />
-            <MessageWindow id="msgWindow" contact={currentContact} addMessage={addMessage}/>
+            <MessageWindow token={token} id="msgWindow" contact={currentContact} addMessage={addMessage} />
         </>
 
     );
