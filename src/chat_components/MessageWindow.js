@@ -4,9 +4,10 @@ import React, {useEffect, useState} from "react";
 function MessageWindow (props){
     const [messageContent, setMessageContent] = useState('');
     const [messages,setMessages]=useState({})
-    const [stam,setStam]=useState(0)
+    // const [stam,setStam]=useState(0)
 
 
+    // const [currentChat, setCurrentChat] = useState()
 
     const handleSendMessage = () => {
         if (messageContent.length === 0){
@@ -26,7 +27,7 @@ function MessageWindow (props){
         // contact.chat.push(newMsg)
         setMessageContent('');
     };
-    async function getMessages() {
+    async function  getMessages() {
         const token= props.token;
         const url = `http://localhost:5000/api/Chats/${props.contact.id}/Messages`;
         try {
@@ -40,6 +41,7 @@ function MessageWindow (props){
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
+
 
             const data = await response.json();
             console.log('my data: ', data);
@@ -71,7 +73,7 @@ function MessageWindow (props){
                 <div className="col col-md-12" id="message_container">
                     <div id="message-window">
                         {props.contact !== null ? messages.length > 0 ? messages.map((message, index) => (
-                            <Message key={index}  msg={message} side={message.sender.username === props.contact.username }/>
+                            <Message key={index}  msg={message} sender={message.sender.username === props.contact.user.username }/>
                         )): "" : ""}
                     </div>
                 </div>

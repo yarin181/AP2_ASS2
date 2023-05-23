@@ -14,7 +14,7 @@ function Chat(props){
     const [showAlert, setShowAlert] = useState(false);
     const [errorMessage,setErrorMessage] = useState('')
     const [connectUser,setConnectUser]=useState({})
-    const [users, setUsers]=useState({})
+    // const [users, setUsers]=useState({})
     const [contactsList,setContactsList] = useState([]);
     function handleLogOut() {
         props.setIsConnected(false)
@@ -134,10 +134,10 @@ function Chat(props){
 
     const handleItemClick = (ContactInfo) => {
         setContact(ContactInfo);
-        if (ContactInfo.chat > 0){
-            let messageContainer = document.getElementById("message-container");
-            messageContainer.scrollTop = messageContainer.scrollHeight;
-        }
+        // if (ContactInfo > 0){
+        //     let messageContainer = document.getElementById("message-container");
+        //     messageContainer.scrollTop = messageContainer.scrollHeight;
+        // }
     };
 
       const addContact = async (newContact) => {
@@ -147,16 +147,13 @@ function Chat(props){
               await getUsersWithToken();
           }
           // setContactsList([...contactsList, newContact]);
+
       };
     const handleError = (errorMsg) =>{
         setErrorMessage(errorMsg);
         setShowAlert(true);
         setTimeout(() =>setShowAlert(false), 2000);
     }
-
-
-
-
     const addMessage = async (newMsg, id) => {
         const msgJson= {msg:newMsg}
         // console.log(newMsg)
@@ -177,8 +174,6 @@ function Chat(props){
         // }
     };
 
-
-
     useEffect(() => {
         const fetchData = async () => {
             // Initialization code
@@ -186,7 +181,6 @@ function Chat(props){
             await getUser();
             console.log("contacts: ",contactsList)
         };
-
 
         // Call the async function immediately
         fetchData().then(r => {});
