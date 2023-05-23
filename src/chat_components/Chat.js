@@ -108,6 +108,7 @@ function Chat(props){
             console.log("contacts: ",contactsList)
         };
 
+
         // Call the async function immediately
         fetchData().then(r => {});
 
