@@ -4,6 +4,7 @@ import placeholder from "../img/profile.png"
 import React, {useState} from "react";
 import InputBar from "./InputBar";
 import {Navigate} from "react-router-dom";
+import async from "async";
 
 
 function RegisterPage(props) {
@@ -116,24 +117,44 @@ function RegisterPage(props) {
         }
     }
 
+    async function addUser(newUser){
+        try {
+            console.log(newUser);
+            const response = await fetch('http://localhost:5000/api/Users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newUser)
+            });
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+            } else {
+                throw new Error('Request failed');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
     //if the user submits:
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
         //creating new user
         const newUser = {
-            username : username,
-            password : password,
+            username: username,
+            password: password,
             displayName: displayName,
-            image :imageSrc
+            profilePic: imageSrc
         };
         //if the user is valid he is added to the list
-        if(checkUserValidity()){
-            props.addToList(newUser);
+        if (checkUserValidity()) {
+            await addUser(newUser);
             setIsValidUser(true)
-        //if the user is invalid we alert
-        }else{
+            //if the user is invalid we alert
+        } else {
             setSubmitAlert(true)
-            imageContent(validImage && imageSrc !==  '')
+            imageContent(validImage && imageSrc !== '')
         }
     }
 
