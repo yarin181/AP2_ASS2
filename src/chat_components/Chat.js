@@ -1,5 +1,5 @@
 import "./chatStyle.css"
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import AddContact from "./AddContact";
 import {Navigate} from "react-router-dom";
 import ContactsSide from "./ContactsSide";
@@ -38,12 +38,11 @@ function Chat(props){
 
             const data = await response.json();
             console.log('Users:', data);
+            setContactsList(data);
         } catch (error) {
             console.error('Error:', error.message);
         }
     }
-    getUsersWithToken()
-
     const connectUser = {
         username: props.currentUser.username,
         password: props.currentUser.password,
@@ -88,6 +87,35 @@ function Chat(props){
             console.log(updatedContactsList)
         }
     };
+
+    // //init the component
+    // useEffect(async () => {
+    //
+    // }, []);
+
+    // useEffect(async () => {
+    //     // Initialization code
+    //
+    //     setContactsList(await getUsersWithToken());
+    //     return () => {
+    //     };
+    // }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            // Initialization code
+            await getUsersWithToken();
+            console.log("contacts: ",contactsList)
+        };
+
+        // Call the async function immediately
+        fetchData().then(r => {});
+
+        return () => {
+            // Cleanup code (if needed)
+        };
+    }, []);
+
     if (logOut) {
         return <Navigate to="/" />;
     }
