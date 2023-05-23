@@ -14,7 +14,7 @@ function AddContact({onAdd,contacts,handleError}){
             handleError('Insert A Valid Name');
             return;
         }
-        const contact = {name: name}
+        const contact = {username: name}
         onAdd(contact);
         setName('');
     }

@@ -29,9 +29,9 @@ function ContactsSide({user,contactsList,handleItemClick,contact,handleLogOut}){
             </div>
             <br/>
             <ul className="list-group" id="contactsList">
-                {contactsList.map((user, index) => (
+                {contactsList.map((c, index) => (
                     <ul key={index}>
-                        <UserBar userInfo={user} onItemClick={handleItemClick} contact={contact}/>
+                        <UserBar userInfo={c} onItemClick={handleItemClick} contact={contact}/>
                     </ul>
                 ))}
             </ul>
