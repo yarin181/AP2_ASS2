@@ -24,6 +24,7 @@ function Login(props){
 
 
 
+
     //handling every input change
     function handlePasswordChange(event) {
         setPassword(event.target.value);
@@ -38,37 +39,37 @@ function Login(props){
     //pressing the sign-up button
     function signUp() {
         setNeedToSignUp(true);
-
     }
 
     //pressing the log-in button
     async function handleSubmit(event) {
         event.preventDefault();
         setIsSubmitted(true)
-        //finding the user
-        const user = props.usersList.find(c => c.username === username);
-        //the user exists and the password is correct:
-        if (!(user === undefined)) {
-            if (user.password === password) {
-                props.setCurrentUser(user);
-                props.setIsConnected(true);
-                setIsRegisteredUser(true);
-                const validToken = await getToken();
-                if(validToken){
-                    console.log("in")
-                    //yoav's code
-                }
-            }
-        }
-        setUsernameClassContent("form-control is-invalid log-in-input")
-        setPasswordClassContent("form-control is-invalid log-in-input")
-    }
-   async function getToken() {
-        //create the json user
         const user = {
             username: username,
             password: password
         };
+        //finding the user
+        const validToken = await getToken(user);
+        if(validToken){
+            props.setCurrentUser(user);
+            props.setIsConnected(true);
+            setIsRegisteredUser(true);
+        }
+
+        // const user = props.usersList.find(c => c.username === username);
+        //the user exists and the password is correct:
+        // if (!(user === undefined)) {
+        //     if (user.password === password) {
+
+
+            // }
+        // }
+        setUsernameClassContent("form-control is-invalid log-in-input")
+        setPasswordClassContent("form-control is-invalid log-in-input")
+    }
+   async function getToken(user) {
+        //create the json user
         try {
             const response = await fetch('http://localhost:5000/api/Tokens', {
                 method: 'POST',
@@ -90,6 +91,7 @@ function Login(props){
                     const chunk = decoder.decode(value);
                     // Concatenate the decoded chunk
                     token += chunk;
+                    props.setToken(token)
                     console.log(token);
                     return 1;
                 }
