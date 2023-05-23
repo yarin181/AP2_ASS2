@@ -14,15 +14,12 @@ function App(){
     const [isConnected,setIsConnected]=useState(false)
     const [currentUser, setCurrentUser]=useState({})
 
-    function addToList(value) {
-        setUsersList([...usersList, value]);
-    }
   return (
       <BrowserRouter>
           <GenericComponent />
           <Routes>
               <Route path="/" element={ <Login usersList={usersList} setIsConnected={setIsConnected} setCurrentUser={setCurrentUser}/>} />
-              <Route path="/registerPage" element={<RegisterPage addToList={addToList} />} />
+              <Route path="/registerPage" element={<RegisterPage />} />
               <Route path="/chat" element={isConnected ? (<Chat currentUser={currentUser} setIsConnected={setIsConnected} />) :   (<Navigate to="/" replace={true} />) } />
           </Routes>
       </BrowserRouter>
