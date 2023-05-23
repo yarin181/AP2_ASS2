@@ -93,6 +93,31 @@ function Chat(props){
             return 0
         }
     }
+    async function postMessage(newMsg,id){
+        const token= props.token;
+        try {
+            // console.log(JSON.stringify(newMsg) );
+            const response = await fetch(`http://localhost:5000/api/Chats/${id}/Messages`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newMsg)
+            });
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                return 1
+            } else {
+                console.error('Request failed');
+                return 0
+            }
+        } catch (error) {
+            console.error(error);
+            return 0
+        }
+    }
 
 
 
@@ -131,19 +156,25 @@ function Chat(props){
 
 
 
-    const addMessage = (newMsg,name) => {
 
-        const index = contactsList.findIndex(contact => contact.name === name);
-        if (index !== -1){
-            const updatedContact = {
-                ...contactsList[index],
-                chat: [...contactsList[index].chat, newMsg]
-            };
-            const updatedContactsList = [...contactsList];
-            updatedContactsList[index] = updatedContact;
-            setContactsList(updatedContactsList);
-            console.log(updatedContactsList)
-        }
+    const addMessage = async (newMsg, id) => {
+        const msgJson= {msg:newMsg}
+        // console.log(newMsg)
+        // console.log(id)
+        await postMessage( msgJson, id)
+
+
+        // const index = contactsList.findIndex(contact => contact.name === name);
+        // if (index !== -1){
+        //     const updatedContact = {
+        //         ...contactsList[index],
+        //         chat: [...contactsList[index].chat, newMsg]
+        //     };
+        //     const updatedContactsList = [...contactsList];
+        //     updatedContactsList[index] = updatedContact;
+        //     setContactsList(updatedContactsList);
+        //     console.log(updatedContactsList)
+        // }
     };
 
 
@@ -181,7 +212,7 @@ function Chat(props){
                             <ContactsSide user={connectUser} contactsList={contactsList} handleItemClick={handleItemClick} contact={currentContact} handleLogOut={handleLogOut}/>
                         </div>
                         <div className="col">{
-                            contactsList.length > 0 ? < ChatSide currentContact={currentContact} addMessage={addMessage} />: ""
+                            currentContact  ? < ChatSide token = {props.token} currentContact={currentContact} addMessage={addMessage} />: ""
                         }
                         </div>
                     </div>
