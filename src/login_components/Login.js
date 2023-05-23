@@ -79,22 +79,25 @@ function Login(props){
                 body: JSON.stringify(user)
             });
             if (response.ok) {
-                const reader = await response.body.getReader()
-                const decoder = new TextDecoder(); // Create a TextDecoder
-                let token = ''; // Variable to store the concatenated stream chunks
-                while (true) {
-                    // Read the next chunk from the stream
-                    const { done, value } = await reader.read();
-                    // Exit the loop if there are no more chunks to read
-                    if (done) break;
-                    // Decode the chunk using the TextDecoder
-                    const chunk = decoder.decode(value);
-                    // Concatenate the decoded chunk
-                    token += chunk;
-                    props.setToken(token)
-                    console.log(token);
-                    return 1;
-                }
+                const reader = await response.text()
+
+                props.setToken(reader)
+                // const decoder = new TextDecoder(); // Create a TextDecoder
+                // let token = ''; // Variable to store the concatenated stream chunks
+               return 1
+                // while (true) {
+                //     // Read the next chunk from the stream
+                //     const { done, value } = await reader.read();
+                //     // Exit the loop if there are no more chunks to read
+                //     if (done) break;
+                //     // Decode the chunk using the TextDecoder
+                //     const chunk = decoder.decode(value);
+                //     // Concatenate the decoded chunk
+                //     token += chunk;
+                //     props.setToken(token)
+                //     console.log(token);
+                //     return 1;
+                // }
             } else {
                 // Handle the case when the token request was unsuccessful
                 console.error('Token request failed:', response.status);

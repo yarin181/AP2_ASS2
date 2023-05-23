@@ -82,6 +82,7 @@ function Chat(props){
             });
             if (response.ok) {
                 const data = await response.json();
+                setContact(data)
                 console.log(data);
                 return 1
             } else {
@@ -146,7 +147,6 @@ function Chat(props){
               await getUsersWithToken();
           }
           // setContactsList([...contactsList, newContact]);
-          setContact(newContact);
       };
     const handleError = (errorMsg) =>{
         setErrorMessage(errorMsg);
