@@ -42,7 +42,7 @@ function Login(props){
     }
 
     //pressing the log-in button
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
         setIsSubmitted(true)
         //finding the user
@@ -53,11 +53,57 @@ function Login(props){
                 props.setCurrentUser(user);
                 props.setIsConnected(true);
                 setIsRegisteredUser(true);
+                const validToken = await getToken();
+                if(validToken){
+                    console.log("in")
+                    //yoav's code
+                }
             }
         }
         setUsernameClassContent("form-control is-invalid log-in-input")
         setPasswordClassContent("form-control is-invalid log-in-input")
     }
+   async function getToken() {
+        //create the json user
+        const user = {
+            username: username,
+            password: password
+        };
+        try {
+            const response = await fetch('http://localhost:5000/api/Tokens', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(user)
+            });
+            if (response.ok) {
+                const reader = await response.body.getReader()
+                const decoder = new TextDecoder(); // Create a TextDecoder
+                let token = ''; // Variable to store the concatenated stream chunks
+                while (true) {
+                    // Read the next chunk from the stream
+                    const { done, value } = await reader.read();
+                    // Exit the loop if there are no more chunks to read
+                    if (done) break;
+                    // Decode the chunk using the TextDecoder
+                    const chunk = decoder.decode(value);
+                    // Concatenate the decoded chunk
+                    token += chunk;
+                    console.log(token);
+                    return 1;
+                }
+            } else {
+                // Handle the case when the token request was unsuccessful
+                console.error('Token request failed:', response.status);
+                return 0
+            }
+        } catch (error) {
+            console.error('Error occurred while fetching the token:', error);
+            return 0
+        }
+    }
+
 
     //navigate to different pages
     if (needToSignUp) {
