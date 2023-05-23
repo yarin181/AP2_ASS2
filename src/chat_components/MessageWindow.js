@@ -27,7 +27,7 @@ function MessageWindow (args){
             <div className="row" id="message_placeholder">
                 <div className="col col-md-12" id="message_container">
                     <div id="message-window">
-                        {contact !== '' ? contact.chat.length > 0 ? contact.chat.map((message, index) => (
+                        {contact !== '' ? 0 > 0 ? contact.chat.map((message, index) => (
                             <Message key={index}  msg={message}/>
                         )): "" : ""}
                     </div>

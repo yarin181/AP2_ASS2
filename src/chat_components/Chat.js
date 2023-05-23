@@ -68,7 +68,31 @@ function Chat(props){
             console.error('Error:', error.message);
         }
     }
-    // getUsersWithToken()
+    async function postContact(newUser){
+        const token= props.token;
+        try {
+            // console.log( JSON.stringify(newUser));
+            const response = await fetch('http://localhost:5000/api/Chats', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newUser)
+            });
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                return 1
+            } else {
+                console.error('Request failed');
+                return 0
+            }
+        } catch (error) {
+            console.error(error);
+            return 0
+        }
+    }
 
 
 
@@ -90,18 +114,23 @@ function Chat(props){
         }
     };
 
-    const addContact = (newContact) =>{
-        setShowAlert(false);
-
-
-        setContactsList([...contactsList, newContact]);
-        setContact(newContact);
-    };
+      const addContact = async (newContact) => {
+          setShowAlert(false);
+          const validContact = await postContact(newContact);
+          if (validContact) {
+              await getUsersWithToken();
+          }
+          // setContactsList([...contactsList, newContact]);
+          setContact(newContact);
+      };
     const handleError = (errorMsg) =>{
         setErrorMessage(errorMsg);
         setShowAlert(true);
         setTimeout(() =>setShowAlert(false), 2000);
     }
+
+
+
     const addMessage = (newMsg,name) => {
 
         const index = contactsList.findIndex(contact => contact.name === name);
