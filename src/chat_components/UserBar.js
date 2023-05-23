@@ -13,18 +13,18 @@ function UserBar(props){
             </div>
             <div className="grid-item item2">
                 <div className="nickname1">{userInfo.name}
-                    <p className="small-message"> {userInfo.chat.length > 0 ?
-                        (userInfo.chat[userInfo.chat.length-1].content.length > 25 ?
-                            userInfo.chat[userInfo.chat.length-1].content.substring(0, 25) + "..." :
-                            userInfo.chat[userInfo.chat.length-1].content) :
-                        ""}</p>
+                    {/*<p className="small-message"> {userInfo.chat.length > 0 ?*/}
+                    {/*    (userInfo.chat[userInfo.chat.length-1].content.length > 25 ?*/}
+                    {/*        userInfo.chat[userInfo.chat.length-1].content.substring(0, 25) + "..." :*/}
+                    {/*        userInfo.chat[userInfo.chat.length-1].content) :*/}
+                    {/*    ""}</p>*/}
                 </div>
 
             </div>
-            <div className="grid-item item3">
-                {userInfo.chat.length > 0 ? userInfo.chat[userInfo.chat.length-1].date: "" }<p className="small-message">
-                {userInfo.chat.length > 0 ? userInfo.chat[userInfo.chat.length-1].time: "" }</p>
-            </div>
+            {/*<div className="grid-item item3">*/}
+            {/*    {userInfo.chat.length > 0 ? userInfo.chat[userInfo.chat.length-1].date: "" }<p className="small-message">*/}
+            {/*    {userInfo.chat.length > 0 ? userInfo.chat[userInfo.chat.length-1].time: "" }</p>*/}
+            {/*</div>*/}
         </div>
     </a>
 

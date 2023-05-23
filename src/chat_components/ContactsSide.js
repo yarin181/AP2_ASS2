@@ -10,7 +10,7 @@ function ContactsSide({user,contactsList,handleItemClick,contact,handleLogOut}){
             <div className="row" id="chat-bar">
                 <div id="user" className="col col-2">
                     <div className="container users">
-                        {user.image ? <img src={user.image} alt="your-image-description" className="rounded-circle img-responsive img-rounded" width={60} height={60}/> : ""}
+                        {user.profilePic ? <img src={user.profilePic} alt="your-image-description" className="rounded-circle img-responsive img-rounded" width={60} height={60}/> : ""}
                     </div>
                 </div>
                 <div id="nickName" className="col col-6">

@@ -13,15 +13,40 @@ function Chat(props){
     const [logOut, setLogOut] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [errorMessage,setErrorMessage] = useState('')
+    const [connectUser,setConnectUser]=useState({})
+    const [users, setUsers]=useState({})
+    const [contactsList,setContactsList] = useState([]);
     function handleLogOut() {
         props.setIsConnected(false)
         setLogOut(true);
+    }
+    async function getUser() {
+        const token= props.token;
+        const url = `http://localhost:5000/api/Users/${props.currentUser.username}`;
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}` // Add the token as an 'Authorization' header
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('my data: ', data);
+            setConnectUser(data)
+        } catch (error) {
+            console.error('Error:', error.message);
+        }
     }
 
 
     async function getUsersWithToken() {
         const token= props.token;
-        console.log("this is the token: ",token)
+        // console.log("this is the token: ",token)
         const url = 'http://localhost:5000/api/Chats';
 
         try {
@@ -38,18 +63,22 @@ function Chat(props){
 
             const data = await response.json();
             console.log('Users:', data);
-            setContactsList(data);
+            setContactsList(data)
         } catch (error) {
             console.error('Error:', error.message);
         }
     }
-    const connectUser = {
-        username: props.currentUser.username,
-        password: props.currentUser.password,
-        displayName: props.currentUser.displayName,
-        image : props.currentUser.image
-    }
-    const [contactsList,setContactsList] = useState([]);
+    // getUsersWithToken()
+
+
+
+    // const connectUser = {
+    //     username: props.currentUser.username,
+    //     password: props.currentUser.password,
+    //     displayName: props.currentUser.displayName,
+    //     profilePic : props.currentUser.image
+    // }
+
     const [currentContact, setContact] = useState('');
 
 
@@ -88,23 +117,13 @@ function Chat(props){
         }
     };
 
-    // //init the component
-    // useEffect(async () => {
-    //
-    // }, []);
 
-    // useEffect(async () => {
-    //     // Initialization code
-    //
-    //     setContactsList(await getUsersWithToken());
-    //     return () => {
-    //     };
-    // }, []);
 
     useEffect(() => {
         const fetchData = async () => {
             // Initialization code
             await getUsersWithToken();
+            await getUser();
             console.log("contacts: ",contactsList)
         };
 
