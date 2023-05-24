@@ -1,6 +1,6 @@
 const express = require('express')
 //initial express
-var app = express();
+const app = express();
 
 //signal for the post
 const bodyParser = require('body-parser');
@@ -21,5 +21,11 @@ const customEnv = require('custom-env');
 customEnv.env(process.env.NODE_ENV,'./config');
 
 app.use(express.static('public'))
+
+app.use('/api/chat',ProcessLogin,chatsRouter);
+app.use('/api/token',tokenRouter);
+app.use('/api/users',usersRouter);
+
+
 //local variable 35:00 in hemi's video
 app.listen(process.env.PORT)
