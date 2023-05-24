@@ -11,7 +11,7 @@ import React, {useState} from "react";
 
 function App(){
     const [usersList, setUsersList] = useState([]);
-    const [isConnected,setIsConnected]=useState(true)
+    const [isConnected,setIsConnected]=useState(false)
     const [currentUser, setCurrentUser]=useState({})
     const [token,setToken]=useState('')
 
