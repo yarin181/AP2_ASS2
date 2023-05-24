@@ -24,6 +24,7 @@ function Login(props){
 
 
 
+
     //handling every input change
     function handlePasswordChange(event) {
         setPassword(event.target.value);
@@ -38,37 +39,37 @@ function Login(props){
     //pressing the sign-up button
     function signUp() {
         setNeedToSignUp(true);
-
     }
 
     //pressing the log-in button
     async function handleSubmit(event) {
         event.preventDefault();
         setIsSubmitted(true)
-        //finding the user
-        const user = props.usersList.find(c => c.username === username);
-        //the user exists and the password is correct:
-        if (!(user === undefined)) {
-            if (user.password === password) {
-                props.setCurrentUser(user);
-                props.setIsConnected(true);
-                setIsRegisteredUser(true);
-                const validToken = await getToken();
-                if(validToken){
-                    console.log("in")
-                    //yoav's code
-                }
-            }
-        }
-        setUsernameClassContent("form-control is-invalid log-in-input")
-        setPasswordClassContent("form-control is-invalid log-in-input")
-    }
-   async function getToken() {
-        //create the json user
         const user = {
             username: username,
             password: password
         };
+        //finding the user
+        const validToken = await getToken(user);
+        if(validToken){
+            props.setCurrentUser(user);
+            props.setIsConnected(true);
+            setIsRegisteredUser(true);
+        }
+
+        // const user = props.usersList.find(c => c.username === username);
+        //the user exists and the password is correct:
+        // if (!(user === undefined)) {
+        //     if (user.password === password) {
+
+
+            // }
+        // }
+        setUsernameClassContent("form-control is-invalid log-in-input")
+        setPasswordClassContent("form-control is-invalid log-in-input")
+    }
+   async function getToken(user) {
+        //create the json user
         try {
             const response = await fetch('http://localhost:5000/api/Tokens', {
                 method: 'POST',
@@ -78,21 +79,25 @@ function Login(props){
                 body: JSON.stringify(user)
             });
             if (response.ok) {
-                const reader = await response.body.getReader()
-                const decoder = new TextDecoder(); // Create a TextDecoder
-                let token = ''; // Variable to store the concatenated stream chunks
-                while (true) {
-                    // Read the next chunk from the stream
-                    const { done, value } = await reader.read();
-                    // Exit the loop if there are no more chunks to read
-                    if (done) break;
-                    // Decode the chunk using the TextDecoder
-                    const chunk = decoder.decode(value);
-                    // Concatenate the decoded chunk
-                    token += chunk;
-                    console.log(token);
-                    return 1;
-                }
+                const reader = await response.text()
+
+                props.setToken(reader)
+                // const decoder = new TextDecoder(); // Create a TextDecoder
+                // let token = ''; // Variable to store the concatenated stream chunks
+               return 1
+                // while (true) {
+                //     // Read the next chunk from the stream
+                //     const { done, value } = await reader.read();
+                //     // Exit the loop if there are no more chunks to read
+                //     if (done) break;
+                //     // Decode the chunk using the TextDecoder
+                //     const chunk = decoder.decode(value);
+                //     // Concatenate the decoded chunk
+                //     token += chunk;
+                //     props.setToken(token)
+                //     console.log(token);
+                //     return 1;
+                // }
             } else {
                 // Handle the case when the token request was unsuccessful
                 console.error('Token request failed:', response.status);

@@ -4,13 +4,13 @@ import React from "react";
 import img from "../photos/robo4.jpg";
 import signout from "../img/sign-out.png";
 
-function ContactsSide({user,contactsList,handleItemClick,contact,handleLogOut}){
+function ContactsSide({user,contactsList,handleItemClick,contact,handleLogOut,temp}){
     return(
         <div className="container">
             <div className="row" id="chat-bar">
                 <div id="user" className="col col-2">
                     <div className="container users">
-                        {user.image ? <img src={user.image} alt="your-image-description" className="rounded-circle img-responsive img-rounded" width={60} height={60}/> : ""}
+                        {user.profilePic ? <img src={user.profilePic} alt="your-image-description" className="rounded-circle img-responsive img-rounded" width={60} height={60}/> : ""}
                     </div>
                 </div>
                 <div id="nickName" className="col col-6">
@@ -29,9 +29,9 @@ function ContactsSide({user,contactsList,handleItemClick,contact,handleLogOut}){
             </div>
             <br/>
             <ul className="list-group" id="contactsList">
-                {contactsList.map((user, index) => (
+                {contactsList.map((c, index) => (
                     <ul key={index}>
-                        <UserBar userInfo={user} onItemClick={handleItemClick} contact={contact}/>
+                        <UserBar userInfo={c} onItemClick={handleItemClick} contact={contact} temp={temp}/>
                     </ul>
                 ))}
             </ul>

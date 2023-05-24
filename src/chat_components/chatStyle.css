@@ -38,7 +38,14 @@
 .form-control {
     margin-top: auto;
 }
-
+#userBar-photo{
+    height: 60px;
+    width: 60px;
+}
+#chatSide-photo{
+    height: 70px;
+    width: 70px;
+}
 #inputName{
     width: 100%;
 }
