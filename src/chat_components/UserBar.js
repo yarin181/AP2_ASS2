@@ -22,7 +22,7 @@ function UserBar(props){
                 </div>
 
             </div>
-            <LastMessageDetails userInfo={props.userInfo} />
+            <LastMessageDetails userInfo={props.userInfo} temp={props.temp}/>
         </div>
     </a>
 
