@@ -1,6 +1,6 @@
 
-function Message({msg,index,side}) {
-    const className =  side ? "message sent" : "message received";
+function Message({msg,index,sender}) {
+    const className =  sender ? "message sent" : "message received";
     return (
         <div className={className} id={index}>
             <p className="message-text">{msg.content}</p>
