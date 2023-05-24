@@ -160,6 +160,7 @@ function RegisterPage(props) {
             });
             if (response.status === 409) {
                 setShowAlert(true)
+                setTimeout(() =>setShowAlert(false), 3000);
                 throw new Error('Request failed');
             }
             return 1
