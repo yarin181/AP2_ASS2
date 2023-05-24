@@ -5,6 +5,7 @@ import React, {useState} from "react";
 import InputBar from "./InputBar";
 import {Navigate} from "react-router-dom";
 import async from "async";
+import {Alert} from "react-bootstrap";
 
 
 function RegisterPage(props) {
@@ -39,6 +40,9 @@ function RegisterPage(props) {
     const [imageClass,setImageClass]=useState("btn btn-register input-register-style form-control")
     const [imageCircleClass,setImageCircleClass]=useState("user-photo rounded-circle")
     const [imageAlertMessage,setImageAlertMessage]=useState("")
+
+    const [showAlert, setShowAlert]=useState(false)
+    const [errorMessage,setErrorMessage]=useState("this user already exist")
 
     // const inputRef = useRef(null);
     //the function validate the uploaded pic
@@ -101,7 +105,7 @@ function RegisterPage(props) {
     //check if the user is valid
     function checkUserValidity(){
         return true
-        // return isConfirm && validPassword && (username !== '') && (displayName !== '') && (validImage);
+        return isConfirm && validPassword && (username !== '') && (displayName !== '') && (validImage);
     }
     function imageContent(x){
         setIsValidImage(x)
@@ -118,9 +122,35 @@ function RegisterPage(props) {
         }
     }
 
+    // async function addUser(newUser){
+    //     try {
+    //         // console.log(newUser);
+    //         const response = await fetch('http://localhost:5000/api/Users', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify(newUser)
+    //         });
+    //         if (response.body===null) {
+    //             const data = await response.json();
+    //             console.log(data);
+    //             console.log("here")
+    //             return 1
+    //         } else {
+    //             if (response.status === 409){
+    //                 setShowAlert(true)
+    //             }else{
+    //                 throw new Error('Request failed');
+    //             }
+    //             return 0
+    //         }
+    //     } catch (error) {
+    //         return 0
+    //     }
+    // }
     async function addUser(newUser){
         try {
-            console.log(newUser);
             const response = await fetch('http://localhost:5000/api/Users', {
                 method: 'POST',
                 headers: {
@@ -128,14 +158,13 @@ function RegisterPage(props) {
                 },
                 body: JSON.stringify(newUser)
             });
-            if (response.ok) {
-                const data = await response.json();
-                console.log(data);
-            } else {
+            if (response.status === 409) {
+                setShowAlert(true)
                 throw new Error('Request failed');
             }
+            return 1
         } catch (error) {
-            console.error(error);
+            return 0
         }
     }
     //if the user submits:
@@ -150,8 +179,9 @@ function RegisterPage(props) {
         };
         //if the user is valid he is added to the list
         if (checkUserValidity()) {
-            await addUser(newUser);
-            setIsValidUser(true)
+            if(await addUser(newUser)){
+                setIsValidUser(true)
+            }
             //if the user is invalid we alert
         } else {
             setSubmitAlert(true)
@@ -167,7 +197,14 @@ function RegisterPage(props) {
         return <Navigate to="/" />;
     }
         return (
+            <>
+                {showAlert && (
+                    <Alert variant="danger" id="alert-fade-out" onClose={() => setShowAlert(false)} dismissible>
+                        {errorMessage}
+                    </Alert>
+                )}
             <div className="card border-dark col-lg-12 col-md-10 col-sm-10 col-xs-6" id="register-card">
+
                 <img alt="logo" id="top-register-logo" src={icon}/>
                 <form onSubmit={handleSubmit}>
                     <div id="register-box">
@@ -206,6 +243,7 @@ function RegisterPage(props) {
                     </div>
                 </form>
             </div>
+            </>
         );
 
 }
