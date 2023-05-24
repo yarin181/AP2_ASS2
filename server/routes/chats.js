@@ -12,8 +12,8 @@ router.route('/:id')
     .post(chatController.deleteContactByID);
 
 router.route('/:id/messages')
-    .post(chatController.addMessgeToChatByID)
-    .get(chatController.getMessgaesByID);
+    .post(chatController.addMessageToChatByID)
+    .get(chatController.getMessagesByID);
 
 
 export default router;
