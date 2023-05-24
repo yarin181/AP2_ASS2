@@ -1,6 +1,8 @@
 const {Chats,Messages  } = require('../models/chat.js');
 const {getUser} = require('../services/users.js');
+const chat = require("../../src/chat_components/Chat");
 let contactID=0;
+let messageID=0;
 
 //find all the documents that contain username
 const findDocuments= async (username)=>{
@@ -61,7 +63,7 @@ const addChat = async (username,newContact) => {
 
 
 //get contact by id (GET/api/chat/{id})
-const getChatByID = async (id,username) => {
+const getChatByID = async (id) => {
     //create an empty json array
     const json = {};
     return json.push(await Chats.find({ 'id': id }).lean());
@@ -69,23 +71,36 @@ const getChatByID = async (id,username) => {
 
 
 
-
-
-
-//delete a species chat
+//delete chat by id (POST/api/chat/{id}
 const deleteChat = async (id) => {
     return Chats.deleteOne({id});
 };
 
+
+//add message to the chat that has this id (POST/api/chats/{id}/messages
 const addMessage = async (id,created,sender,content) => {
-    const newMessage = new Messages({id,created,sender,content});
-    return await newMessage.save();
+    messageID++;
+    const chat = await Chats.findOne({ id });
+    if (chat) {
+        chat.messages.push({messageID,created, sender, content});
+        await chat.save();
+    }
+    return null
 };
 
-//get new message
-const getMessage = async (id) => {
-    return Messages.findOne({id});
+//return all the message between the login user and the id contact (GET/api/chats/{id}/messages
+const getMessages = async (id) => {
+    const json =[]
+    const chat = await Chats.findOne({ id });
+    if (chat) {
+        chat.forEach((message) => {
+            json.push({ id: message.id, created: message.created,sender:message.sender.username, content:message.content}) ;
+
+        });
+        return json;
+    }
+    return null
 };
 
-module.exports = { getChats,addMessage,addChat,getChat,deleteChat,getMessage,updateLastMessage};
+module.exports = {getChats,addMessage,addChat,deleteChat,getMessages,getChatByID};
 
