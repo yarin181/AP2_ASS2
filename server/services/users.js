@@ -28,4 +28,10 @@ const getUser = async (username) => {
     return Users.findOne({username});
 };
 
-module.exports = { getUser, addUser };
+
+//check if the username found when user logIn
+const findUser = async (username) => {
+    return UsersPass.findOne({username});
+};
+
+module.exports = { getUser, addUser,findUser };
