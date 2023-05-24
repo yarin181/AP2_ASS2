@@ -1,8 +1,27 @@
 const service = require('../services/chat.js')
 
 
-const addMessage = async (req,res) =>{
-   //call to the addUser method in services using POST
-   res.json(await service.addMassage(req.body.id,req.body.created,req.body.sender,req.body.content));
+const getUserContactsList = async (req,res) =>{
+   res.json(await service.getChats(req.username));
 };
-module.exports = {addMessage,getUserContactsList}
+const addContact = async (req,res) =>{
+   //call to the addUser method in services using POST
+   res.json(await service.addChat(req.username,req.body.username));
+};
+const getChatWithID = async (req,res) =>{
+   //call to the addUser method in services using POST
+   res.json(await service.getChatByID(req.id));
+};
+const deleteContactByID = async (req,res) =>{
+   //call to the addUser method in services using POST
+   res.json(await service.deleteChat(req.id));
+};
+const addMessageToChatByID = async (req,res) =>{
+   //call to the addUser method in services using POST
+   res.json(await service.addMessage(req.id,req.body.created,req.body.sender,req.body.content));
+};
+const getMessagesByID = async (req,res) =>{
+   //call to the addUser method in services using POST
+   res.json(await service.getMessages(req.id));
+};
+module.exports = {getMessagesByID,addMessageToChatByID,deleteContactByID,getChatWithID,addContact,getUserContactsList}

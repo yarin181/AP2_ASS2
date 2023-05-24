@@ -86,7 +86,9 @@ function Chat(props){
                 setContact(data)
                 console.log(data);
                 return 1
-            } else {
+            } else if(response.status === 400){
+                handleError("user doesn't exist");
+            }else{
                 console.error('Request failed');
                 return 0
             }
@@ -153,7 +155,7 @@ function Chat(props){
     const handleError = (errorMsg) =>{
         setErrorMessage(errorMsg);
         setShowAlert(true);
-        setTimeout(() =>setShowAlert(false), 2000);
+        setTimeout(() =>setShowAlert(false), 3000);
     }
     const addMessage = async (newMsg, id) => {
         const msgJson= {msg:newMsg}
