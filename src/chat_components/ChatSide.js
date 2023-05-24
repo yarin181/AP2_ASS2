@@ -1,16 +1,16 @@
 
 import img from "../photos/robo2.jpg";
 import MessageWindow from "./MessageWindow";
-import React from "react";
+import React, {useState} from "react";
 
 
-function ChatSide({currentContact,addMessage,token}){
+function ChatSide({currentContact,addMessage,token,temp}){
     return(
         <>
             <div className="row" id="chat-bar">
                 <div className="col col-2">
                     <div className="container">
-                        <img src={currentContact.user.profilePic} className="  rounded-circle img-fluid" alt="Placeholder Image Avatar" width={60} height={60}/>
+                        <img src={currentContact.user.profilePic} id="chatSide-photo" className="rounded-circle" alt="Placeholder Image Avatar" width={60} height={60}/>
                     </div>
                 </div>
                 <div id="connectName" className="col col-8">
@@ -19,7 +19,7 @@ function ChatSide({currentContact,addMessage,token}){
 
         </div>
             <br />
-            <MessageWindow token={token} id="msgWindow" contact={currentContact} addMessage={addMessage} />
+            <MessageWindow token={token} id="msgWindow" contact={currentContact} addMessage={addMessage} temp={temp} />
         </>
 
     );

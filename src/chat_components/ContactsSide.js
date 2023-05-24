@@ -4,7 +4,7 @@ import React from "react";
 import img from "../photos/robo4.jpg";
 import signout from "../img/sign-out.png";
 
-function ContactsSide({user,contactsList,handleItemClick,contact,handleLogOut}){
+function ContactsSide({user,contactsList,handleItemClick,contact,handleLogOut,temp}){
     return(
         <div className="container">
             <div className="row" id="chat-bar">
@@ -31,7 +31,7 @@ function ContactsSide({user,contactsList,handleItemClick,contact,handleLogOut}){
             <ul className="list-group" id="contactsList">
                 {contactsList.map((c, index) => (
                     <ul key={index}>
-                        <UserBar userInfo={c} onItemClick={handleItemClick} contact={contact}/>
+                        <UserBar userInfo={c} onItemClick={handleItemClick} contact={contact} temp={temp}/>
                     </ul>
                 ))}
             </ul>

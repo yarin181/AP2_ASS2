@@ -4,7 +4,6 @@ import React, {useEffect, useState} from "react";
 function MessageWindow (props){
     const [messageContent, setMessageContent] = useState('');
     const [messages,setMessages]=useState({})
-    // const [stam,setStam]=useState(0)
 
 
     // const [currentChat, setCurrentChat] = useState()
@@ -52,6 +51,7 @@ function MessageWindow (props){
     }
 
 
+
     useEffect(() => {
         const fetchData = async () => {
             // Initialization code
@@ -64,7 +64,7 @@ function MessageWindow (props){
         return () => {
             // Cleanup code (if needed)
         };
-    }, [props.contact]);
+    }, [props.contact,props.temp]);
 
     return (
         <>
@@ -72,7 +72,7 @@ function MessageWindow (props){
             <div className="row" id="message_placeholder">
                 <div className="col col-md-12" id="message_container">
                     <div id="message-window">
-                        {props.contact !== null ? messages.length > 0 ? messages.map((message, index) => (
+                        {props.contact !== null ? messages.length > 0 ? messages.slice().reverse().map((message, index) => (
                             <Message key={index}  msg={message} sender={message.sender.username === props.contact.user.username }/>
                         )): "" : ""}
                     </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-function LastMessageDetails({ userInfo }) {
+function LastMessageDetails({ userInfo,temp }) {
     // Extract the day and time from the last message
     if (!userInfo.lastMessage){
         return ;

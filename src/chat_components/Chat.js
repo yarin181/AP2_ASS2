@@ -9,6 +9,7 @@ import {Alert} from "react-bootstrap";
 
 
 function Chat(props){
+    const [temp, setTemp]=useState(0)
 
     const [logOut, setLogOut] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
@@ -159,6 +160,8 @@ function Chat(props){
         // console.log(newMsg)
         // console.log(id)
         await postMessage( msgJson, id)
+        await getUsersWithToken();
+        setTemp(temp+1)
 
 
         // const index = contactsList.findIndex(contact => contact.name === name);
@@ -203,10 +206,10 @@ function Chat(props){
                 <div className="card-body">
                     <div className="row card-content">
                         <div className="col" id="contacts_area">
-                            <ContactsSide user={connectUser} contactsList={contactsList} handleItemClick={handleItemClick} contact={currentContact} handleLogOut={handleLogOut}/>
+                            <ContactsSide user={connectUser} contactsList={contactsList} handleItemClick={handleItemClick} contact={currentContact} handleLogOut={handleLogOut} temp={temp}/>
                         </div>
                         <div className="col">{
-                            currentContact  ? < ChatSide token = {props.token} currentContact={currentContact} addMessage={addMessage} />: ""
+                            currentContact  ? < ChatSide token = {props.token} currentContact={currentContact} addMessage={addMessage} temp={temp}/>: ""
                         }
                         </div>
                     </div>
