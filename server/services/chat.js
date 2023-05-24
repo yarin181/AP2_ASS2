@@ -1,9 +1,5 @@
 const {Chats,Messages,Contacts  } = require('../models/chat.js');
-
-//return all chats (contacts)
-// const getChats = async () => {
-//     return Chats.find();
-// };
+const {getUser} = require('../services/users.js');
 
 //return all contacts
 const getChats = async () => {
@@ -14,21 +10,24 @@ const getChats = async () => {
 const updateLastMessage = async (contactId, newLastMessage) => {
     const contact = await Contacts.findById(contactId);
     if (!contact) {
-        // Contact not found
+        //Contact not found
         return null;
     }
     contact.lastMessage = newLastMessage;
     return await contact.save();
 }
 
-//add chat (contact)
-const addChat = async (id,users) => {
-    const emptyArr=[];
-    const newChat = new Chats({id,users,emptyArr});
+//add contact
+const addChat = async (username) => {
+    //empty messages array
+    const msgArr=[];
+    const user = getUser(username);
+    // ?????? how to get id?
+    const newChat = new Chats({id,user,msgArr});
     return await newChat.save();
 };
 
-//get a species chat
+//get contact
 const getChat = async (id) => {
     return Chats.findOne({id});
 };
@@ -48,5 +47,5 @@ const getMessage = async (id) => {
     return Messages.findOne({id});
 };
 
-module.exports = { getChats,addMessage,addChat,getChat,deleteChat,getMessage};
+module.exports = { getChats,addMessage,addChat,getChat,deleteChat,getMessage,updateLastMessage};
 

@@ -1,23 +1,8 @@
 const mongoose = require('mongoose');
 const Users = require('../models/users.js');
+
 const { Schema } = mongoose;
 
-const contactSchema = new Schema({
-    id: {
-        type: Number,
-        required: true
-    },
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: Users,
-        required: true
-    },
-    lastMessage: {
-        type: String,
-        // i need to put default value
-
-    }
-});
 const messageSchema = new Schema({
     id: {
         type: Number,
@@ -51,9 +36,25 @@ const chatsSchema = new Schema({
     //an array of messages
     messages: [messageSchema]
 });
+const contactSchema = new Schema({
+    id: {
+        type: Number,
+        required: true
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: Users,
+        required: true
+    },
+    lastMessage: {
+        type: messageSchema,
+        // i need to put default value null
+
+    }
+});
 
 const Messages = mongoose.model('Message', messageSchema);
-const Chats = mongoose.model('chats', chatsSchema);contactSchema
+const Chats = mongoose.model('chats', chatsSchema);
 const Contacts = mongoose.model('contacts', contactSchema);
 
 
