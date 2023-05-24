@@ -100,7 +100,8 @@ function RegisterPage(props) {
 
     //check if the user is valid
     function checkUserValidity(){
-        return isConfirm && validPassword && (username !== '') && (displayName !== '') && (validImage);
+        return true
+        // return isConfirm && validPassword && (username !== '') && (displayName !== '') && (validImage);
     }
     function imageContent(x){
         setIsValidImage(x)
