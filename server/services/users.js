@@ -30,8 +30,12 @@ const getUser = async (username) => {
 
 
 //check if the username found when user logIn
-const findUser = async (username) => {
-    return UsersPass.findOne({username});
+const validUserPassword = async (username, password) => {
+    const user = await UsersPass.findOne({ username });
+    if (user && user.password === password) {
+        return true;
+    }
+    return false;
 };
 
-module.exports = { getUser, addUser,findUser };
+module.exports = { getUser, addUser,validUserPassword };

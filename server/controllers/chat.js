@@ -6,7 +6,7 @@ const getUserContactsList = async (req,res) =>{
 };
 const addContact = async (req,res) =>{
    //call to the addUser method in services using POST
-   res.json(await service.addChat(req.username,req.body.username));
+   res.json(await service.addChat(req.getUsername,req.body.username));
 };
 const getChatWithID = async (req,res) =>{
    //call to the addUser method in services using POST
