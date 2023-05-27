@@ -33,5 +33,7 @@ const getUser = async (username) => {
 const findUser = async (username) => {
     return UsersPass.findOne({username});
 };
-
-module.exports = { getUser, addUser,findUser };
+const validUserPassword = async (username,password) =>{
+    return true;
+}
+module.exports = { getUser, addUser,findUser,validUserPassword};

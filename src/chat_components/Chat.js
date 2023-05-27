@@ -110,8 +110,8 @@ function Chat(props){
                 body: JSON.stringify(newMsg)
             });
             if (response.ok) {
-                const data = await response.json();
-                console.log(data);
+                const data = response.json();
+                //console.log(data);
                 return 1
             } else {
                 console.error('Request failed');
