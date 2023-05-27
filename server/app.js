@@ -1,28 +1,31 @@
 const express = require('express')
-//initial express
 const app = express();
-
-//signal for the post
+const {processLogIn,isLoggedIn} = require('./controllers/token')
+const {chatRouter} = require('./routes/chats');
+const {tokenRouter} = require('./routes/token');
+const {usersRouter} = require('./routes/users');
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended:true}));
-//transfer the information throw the json
 app.use(express.json);
 
 //restriction for the browser
 const cors = require('cors');
 app.use(cors());
 
-const mongoose = require('mongoose');
 //connect to mongoose
-mongoose.connect(process.env.CONNECTION_STRING,{
-   useNewUrlParser:true,useUnifiedTopology:true
-});
+const mongoose = require('mongoose');
+
 const customEnv = require('custom-env');
 customEnv.env(process.env.NODE_ENV,'./config');
 
+mongoose.connect(process.env.CONNECTION_STRING,{
+    useNewUrlParser:true,useUnifiedTopology:true
+});
+
+//set the server to use the static files in the public folder.
 app.use(express.static('public'))
 
-app.use('/api/chat',ProcessLogin,chatsRouter);
+app.use('/api/chat',isLoggedIn,chatRouter);
 app.use('/api/token',tokenRouter);
 app.use('/api/users',usersRouter);
 

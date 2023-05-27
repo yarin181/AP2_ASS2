@@ -1,12 +1,12 @@
 import usersController from "../controllers/users.js";
 const express = require('express')
-const router = express.Router();
+const usersRouter = express.Router();
 
 //not necessary need to see how to handle with this
-router.route('/')
+usersRouter.route('/')
     .post(usersController.RegisterUser);
 
-router.route('/:username')
+usersRouter.route('/:username')
     .get(usersController.getUserData)
 
-export default router;
+module.exports= {usersRouter};

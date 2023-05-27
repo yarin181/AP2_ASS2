@@ -1,21 +1,21 @@
 const express = require('express');
 const chatController = require('../controllers/chat');
-const router = express.Router();
+const chatRouter = express.Router();
 
 
-router.route.get('/')
+chatRouter.route.get('/')
     .get(chatController.getUserContactsList)
     .post(chatController.addContact);
 
-router.route('/:id')
+chatRouter.route('/:id')
     .get(chatController.getChatWithID)
     .post(chatController.deleteContactByID);
 
-router.route('/:id/messages')
+chatRouter.route('/:id/messages')
     .post(chatController.addMessageToChatByID)
     .get(chatController.getMessagesByID);
 
 
-export default router;
+module.exports= {chatRouter};
 
 
