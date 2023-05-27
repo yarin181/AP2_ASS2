@@ -44,7 +44,7 @@ const addChat = async (username,newContact) => {
     //add register user
     const newUser = getUser(newContact);
     const user = getUser(username);
-    if(newUser){
+    if(newUser && user){
         //insert the users to the users array;
         users.push(user);
         users.push(newUser);

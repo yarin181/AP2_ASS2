@@ -1,5 +1,4 @@
-const {findUser} = require('../services/users.js');
-const {validUserPassword} = require('../services/users.js');
+const {validUserPassword} = require('../services/token.js');
 
 const jwt = require("jsonwebtoken")
 
@@ -9,15 +8,24 @@ const isLoggedInCheck = async (req,token) => {
     try {
         // Verify the token is valid
         const data = jwt.verify(token, key);
-        req.connectUser = data.username;
+        //req.connectUser = data.username;
         return true;
     } catch (err) {
         return false;
     }
 }
 
+const getUsername = async (token) =>{
+    try {
+        const data = jwt.verify(token, key);
+        return  data.username;
+    } catch (err) {
+        return null;
+    }
+
+}
 
 // Handle login form submission
 
 
-module.exports = {isLoggedInCheck,getToken}
+module.exports = {isLoggedInCheck,getUsername}

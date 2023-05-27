@@ -3,6 +3,10 @@ const { UsersPassName, UsersPass, Users } = require('../models/users.js');
 // the POST action
 const addUser = async (username, password, displayName, profilePic) => {
 
+    //there is already username like this in the data
+    if(UsersPass.findOne(username)){
+        return null;
+    }
     // Update usersPassName table
     const newUserPassName = new UsersPassName({ username, password, displayName, profilePic });
     await newUserPassName.save();
@@ -30,10 +34,12 @@ const getUser = async (username) => {
 
 
 //check if the username found when user logIn
-const findUser = async (username) => {
-    return UsersPass.findOne({username});
+const validUserPassword = async (username, password) => {
+    const user = await UsersPass.findOne({ username });
+    if (user && user.password === password) {
+        return true;
+    }
+    return false;
 };
-const validUserPassword = async (username,password) =>{
-    return true;
-}
-module.exports = { getUser, addUser,findUser,validUserPassword};
+
+module.exports = { getUser, addUser,validUserPassword };
