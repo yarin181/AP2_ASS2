@@ -1,12 +1,12 @@
-import usersController from "../controllers/users.js";
+const {registerUser,getUserData} =  require("../controllers/users.js");
 const express = require('express')
 const usersRouter = express.Router();
 
 //not necessary need to see how to handle with this
 usersRouter.route('/')
-    .post(usersController.RegisterUser);
+    .post(registerUser);
 
 usersRouter.route('/:username')
-    .get(usersController.getUserData)
+    .get(getUserData)
 
 module.exports= {usersRouter};

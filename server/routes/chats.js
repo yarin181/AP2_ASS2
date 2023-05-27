@@ -2,8 +2,7 @@ const express = require('express');
 const chatController = require('../controllers/chat');
 const chatRouter = express.Router();
 
-
-chatRouter.route.get('/')
+chatRouter.route('/')
     .get(chatController.getUserContactsList)
     .post(chatController.addContact);
 

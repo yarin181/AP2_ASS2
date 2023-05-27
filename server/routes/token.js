@@ -3,7 +3,8 @@ const tokenController = require('../controllers/token');
 const tokenRouter = express.Router();
 
 
-tokenRouter.route.get('/').post(tokenController.processLogIn);
+tokenRouter.route('/')
+    .post(tokenController.processLogIn);
 
 module.exports= {tokenRouter};
 

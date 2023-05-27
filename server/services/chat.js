@@ -1,6 +1,6 @@
 const {Chats,Messages  } = require('../models/chat.js');
 const {getUser} = require('../services/users.js');
-const chat = require("../../src/chat_components/Chat");
+//const chat = require("../../src/chat_components/Chat");
 let contactID=0;
 let messageID=0;
 
