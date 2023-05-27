@@ -1,9 +1,9 @@
 const express = require('express');
 const tokenController = require('../controllers/token');
-const router = express.Router();
+const tokenRouter = express.Router();
 
 
-router.route.get('/').post(tokenController.LogInReturnToken);
+tokenRouter.route.get('/').post(tokenController.processLogIn);
 
-export default router;
+module.exports= {tokenRouter};
 

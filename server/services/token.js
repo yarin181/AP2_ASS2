@@ -27,5 +27,4 @@ const getUsername = async (token) =>{
 
 // Handle login form submission
 
-
 module.exports = {isLoggedInCheck,getUsername}

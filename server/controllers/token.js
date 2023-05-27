@@ -11,13 +11,13 @@ const isLoggedIn = (req, res, next) => {
             return next();
         }
         else {
-            return res.status(401).send("Invalid Token");
+            res.status(401).send("Invalid Token");
         }
     } else {
-        return res.status(403).send('Token required');
+        res.status(403).send('Token required');
     }
 };
-const processLogin = (req, res) => {
+const processLogIn = (req, res) => {
     // Check credentials
     const returnVal = validUserPassword(request.body.username,req.body.password)
     if (returnVal) {
@@ -26,13 +26,13 @@ const processLogin = (req, res) => {
         // Generate the token.
         const token = jwt.sign(data, key)
         // Return the token to the browser
-        res.status(201).json({ token });
+        return res.status(201).json({ token });
     }
     else
         // Incorrect username/password. The user should try again.
-        res.status(404).send('Invalid username and/or password')
+        return res.status(404).send('Invalid username and/or password')
 }
-module.exports = {isLoggedIn ,processLogin}
+module.exports = {isLoggedIn ,processLogIn}
 
 // const isLoggedIn = (req, res, next) => {
 //     // If the request has an authorization header
