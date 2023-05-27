@@ -2,15 +2,16 @@ const { UsersPassName, UsersPass, Users } = require('../models/users.js');
 
 // the POST action
 const addUser = async (username, password, displayName, profilePic) => {
-
     //there is already username like this in the data
-    if(UsersPass.findOne(username)){
-        return null;
-    }
+    // if(!UsersPass.findOne({username :username})){
+    //     console.log("username already exists");
+    //     return null;
+    // }
     // Update usersPassName table
     const newUserPassName = await new UsersPassName({ username, password, displayName, profilePic });
     await newUserPassName.save();
 
+    console.log("use registered - ",newUserPassName);
     // Update usersPass table
     const newUserPass =await new UsersPass({ username, password });
     await newUserPass.save();
@@ -29,18 +30,26 @@ const addUser = async (username, password, displayName, profilePic) => {
 
 // the GET action
 const getUser = async (username) => {
-    return Users.findOne({username});
+    console.log("in get user",username)
+    const user = await Users.findOne({username: username});
+    console.log("the get user is - " , user);
+    return user;
 };
 
 
 //check if the username found when user logIn
 const validUserPassword = async (username, password) => {
-    return true;
     const user = await UsersPass.findOne({ username });
-    if (user && user.password === password) {
-        return true;
+    if (!user){
+        return false
+    }else{
+        return await user.password === password
     }
-    return false;
+    // console.log("user is: ",user);
+
+
+    // return return_val;
+
 };
 
-module.exports = { getUser, addUser,validUserPassword };
+module.exports = { getUser, addUser,validUserPassword};

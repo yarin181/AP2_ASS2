@@ -71,13 +71,14 @@ function Login(props){
    async function getToken(user) {
         //create the json user
         try {
-            const response = await fetch('http://localhost:5000/api/Tokens', {
+            const response = await fetch('http://localhost:5000/api/Token', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(user)
             });
+            //console.log("after get token",await response.text());
             if (response.ok) {
                 const reader = await response.text()
 

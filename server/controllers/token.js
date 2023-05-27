@@ -1,7 +1,5 @@
 const service = require('../services/token.js')
 const {validUserPassword} = require('../services/users.js')
-const jwt = require("jsonwebtoken");
-const {request} = require("express");
 
 const isLoggedIn = (req, res, next) => {
     // If the request has an authorization header
@@ -17,20 +15,19 @@ const isLoggedIn = (req, res, next) => {
         res.status(403).send('Token required');
     }
 };
-const processLogIn = (req, res) => {
+const processLogIn = async (req, res) => {
     // Check credentials
-    const returnVal = validUserPassword(request.body.username,req.body.password)
+    const returnVal = await validUserPassword(req.body.username, req.body.password)
     if (returnVal) {
-        // Here, we will only put the *validated* username
-        const data = { username: req.body.username }
-        // Generate the token.
-        const token = jwt.sign(data, key)
+        const token = await service.getUserToken(req.body.username);
         // Return the token to the browser
-        return res.status(201).json({ token });
-    }
-    else
+        return res.status(201).json({token});
+    } else {
+        console.log("in else");
         // Incorrect username/password. The user should try again.
         return res.status(404).send('Invalid username and/or password')
+    }
+
 }
 module.exports = {isLoggedIn ,processLogIn}
 

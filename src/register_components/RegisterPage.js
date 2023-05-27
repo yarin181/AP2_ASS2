@@ -150,14 +150,16 @@ function RegisterPage(props) {
     //     }
     // }
     async function addUser(newUser){
+        console.log("in add user");
         try {
-            const response = await fetch('http://localhost:5000/api/Users', {
+            const response = await fetch('http://localhost:5000/api/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newUser)
             });
+            console.log(response);
             if (response.status === 409) {
                 setShowAlert(true)
                 setTimeout(() =>setShowAlert(false), 3000);

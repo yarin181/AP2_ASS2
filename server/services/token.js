@@ -1,4 +1,4 @@
-const {validUserPassword} = require('../services/token.js');
+//const {validUserPassword} = require('../services/token.js');
 
 const jwt = require("jsonwebtoken")
 
@@ -24,7 +24,13 @@ const getUsername = async (token) =>{
     }
 
 }
+const getUserToken = async (username) =>{
+    // Here, we will only put the *validated* username
+    const data = { username: username}
+    // Generate the token.
+    return  await jwt.sign(data, key)
+}
 
 // Handle login form submission
 
-module.exports = {isLoggedInCheck,getUsername}
+module.exports = {isLoggedInCheck,getUsername,getUserToken}
