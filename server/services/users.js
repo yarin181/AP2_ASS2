@@ -3,6 +3,10 @@ const { UsersPassName, UsersPass, Users } = require('../models/users.js');
 // the POST action
 const addUser = async (username, password, displayName, profilePic) => {
 
+    //there is already username like this in the data
+    if(UsersPass.findOne(username)){
+        return null;
+    }
     // Update usersPassName table
     const newUserPassName = new UsersPassName({ username, password, displayName, profilePic });
     await newUserPassName.save();

@@ -1,27 +1,53 @@
 const service = require('../services/chat.js')
+const {getUsername} = require('../services/users.js');
 
 
 const getUserContactsList = async (req,res) =>{
-   res.json(await service.getChats(req.username));
+   //grt the token
+   const token = req.headers.authorization.split(" ")[1]
+   //call to the addUser method in services using POST
+   if(token){
+      res.json(await service.getChats(req.username));
+   }
+   else{
+      return res.status(401).send("Invalid Token");
+   }
 };
 const addContact = async (req,res) =>{
+   const token = req.headers.authorization.split(" ")[1]
    //call to the addUser method in services using POST
-   res.json(await service.addChat(req.getUsername,req.body.username));
+   if(token){
+     if (res.json(await service.addChat(getUsername(token),req.body.username))){
+        return res.status(400).send("No such user");
+     }
+   }
+   else{
+      return res.status(401).send("Invalid Token");
+   }
+
 };
 const getChatWithID = async (req,res) =>{
    //call to the addUser method in services using POST
-   res.json(await service.getChatByID(req.id));
+   if(!res.json(await service.getChatByID(req.id))){
+      return res.status(401).send("id not found");
+   }
 };
 const deleteContactByID = async (req,res) =>{
    //call to the addUser method in services using POST
-   res.json(await service.deleteChat(req.id));
+   if(!res.json(await service.deleteChat(req.id))){
+      return res.status(404).send("id not found");
+   }
 };
 const addMessageToChatByID = async (req,res) =>{
    //call to the addUser method in services using POST
-   res.json(await service.addMessage(req.id,req.body.created,req.body.sender,req.body.content));
+   if(!res.json(await service.addMessage(req.id,req.body.created,req.body.sender,req.body.content))){
+      return res.status(401).send("chat id not found");
+   }
 };
 const getMessagesByID = async (req,res) =>{
    //call to the addUser method in services using POST
-   res.json(await service.getMessages(req.id));
+   if(!res.json(await service.deleteChat(req.id))){
+      return res.status(401).send("id not found");
+   }
 };
 module.exports = {getMessagesByID,addMessageToChatByID,deleteContactByID,getChatWithID,addContact,getUserContactsList}
