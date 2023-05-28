@@ -14,6 +14,7 @@ const getUserContactsList = async (req,res) =>{
    }
 };
 const addContact = async (req,res) =>{
+   console.log("in add contact");
    const token = req.headers.authorization.split(" ")[1]
    //call to the addUser method in services using POST
    if(token){
