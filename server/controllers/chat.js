@@ -1,5 +1,5 @@
 const service = require('../services/chat.js')
-const {getUsername} = require('../services/users.js');
+const {getUsername} = require('../services/token.js');
 
 
 const getUserContactsList = async (req,res) =>{
@@ -14,12 +14,12 @@ const getUserContactsList = async (req,res) =>{
    }
 };
 const addContact = async (req,res) =>{
-   console.log("in add contact");
+   //console.log("in add contact");
    const token = req.headers.authorization.split(" ")[1]
    //call to the addUser method in services using POST
    if(token){
-     if (res.json(await service.addChat(getUsername(token),req.body.username))){
-        return res.status(400).send("No such user");
+     if (res.json(await service.addChat(await getUsername(token),req.body.username))){
+        //return res.status(400).send("No such user");
      }
    }
    else{

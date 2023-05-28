@@ -2,6 +2,7 @@ const service = require('../services/token.js')
 const {validUserPassword} = require('../services/users.js')
 
 const isLoggedIn = (req, res, next) => {
+    //console.log("in isLogIn")
     // If the request has an authorization header
     if (req.headers.authorization) {
         const return_val = service.isLoggedInCheck(req,req.headers.authorization.split(" ")[1]);
@@ -23,7 +24,7 @@ const processLogIn = async (req, res) => {
         // Return the token to the browser
         return res.status(201).json({token});
     } else {
-        console.log("in else");
+        //console.log("in else");
         // Incorrect username/password. The user should try again.
         return res.status(404).send('Invalid username and/or password')
     }

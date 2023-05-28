@@ -37,7 +37,7 @@ function Chat(props){
             }
 
             const data = await response.json();
-            console.log('my data: ', data);
+            //console.log('my data: ', data);
             setConnectUser(data)
         } catch (error) {
             console.error('Error:', error.message);
@@ -63,7 +63,7 @@ function Chat(props){
             }
 
             const data = await response.json();
-            console.log('Users:', data);
+            //console.log('Users:', data);
             setContactsList(data)
         } catch (error) {
             console.error('Error:', error.message);
@@ -84,7 +84,7 @@ function Chat(props){
             if (response.ok) {
                 const data = await response.json();
                 setContact(data)
-                console.log(data);
+                //console.log(data);
                 return 1
             } else if(response.status === 400){
                 handleError("user doesn't exist");

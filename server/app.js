@@ -84,9 +84,10 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
 app.use(cors());
-app.use('/api/Chat',chatRouter);
+app.use('/api/Chats',chatRouter);
 app.use('/api/Users',usersRouter);
 app.use('/api/Token',tokenRouter);
+
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

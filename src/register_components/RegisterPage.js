@@ -150,7 +150,7 @@ function RegisterPage(props) {
     //     }
     // }
     async function addUser(newUser){
-        console.log("in add user");
+        //console.log("in add user");
         try {
             const response = await fetch('http://localhost:5000/api/users', {
                 method: 'POST',
