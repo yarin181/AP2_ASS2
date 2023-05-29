@@ -20,17 +20,16 @@ const addContact = async (req,res) =>{
    //call to the addUser method in services using POST
    //console.log("21 connect user is - ",req.headers.connectedUser);
    //console.log("to add user user is - ",req.body.username);
-   if (res.json(await service.addChat(req.headers.connectedUser,req.body.username))){
-      //console.log("the caht added!")
-      return res.status(404).send("No such user");
+   if(token){
+     if (res.json(await service.addChat(req.headers.connectedUser,req.body.username))){
+        //console.log("the caht added!")
+        //return res.status(400).send("No such user");
+     }
    }
-
-   // if(token){
-   // }
-   // else{
-   //    //console.log("the caht NOT add!");
-   //    return res.status(401).send("Invalid Token");
-   // }
+   else{
+      //console.log("the caht NOT add!");
+      return res.status(401).send("Invalid Token");
+   }
 
 };
 const getChatWithID = async (req,res) =>{
