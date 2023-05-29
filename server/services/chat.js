@@ -58,23 +58,35 @@ const getChats = async (username) => {
 //add contact (POST/api/chat)
 const addChat = async (username,newContact) => {
     const json = {};
-    const users=[]
+    //const users=[]
     //add register user
     const newUser = await getUser(newContact);
     const user = await getUser(username);
     if(newUser && user){
         //insert the users to the users array;
-        users.push(user);
-        users.push(newUser);
+        //const users = [user,newUser];
+        // users.push(user);
+        // users.push(newUser);
         //new chat id
-        contactID++;
+        contactID = await Chats.countDocuments();
 
         //empty messages array
-        const msgArr=[];
+        //const msgArr=[];
         //console.log("contactId : ",contactID,"user :" ,users,"msg arr-" ,msgArr)
-        const newChat = await new Chats(contactID,users,msgArr);
+        const newChat = await new Chats({
+            "id": contactID,
+            "users" : [user,newUser],
+            "messages": []
+        });
         await newChat.save();
-        return json.push({contactID,user,msgArr})
+        console.log("the new chat is -",newChat);
+        // console.log("newChat 0", newChat.users);
+        //console.log("newChat 1", newChat.users[1]);
+        //return json.push({contactID,user,msgArr})
+        return {
+            "id": contactID,
+            "user" :newUser
+        }
     }
     //user not found
     return null;

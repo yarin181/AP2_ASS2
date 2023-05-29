@@ -4,21 +4,23 @@ const jwt = require("jsonwebtoken")
 
 const key = "Some super secret key shhhhhhhhhhhhhhhhh!!!!!"
 
-const isLoggedInCheck = async (req,token) => {
+const isLoggedInCheck = async (token) => {
     try {
         // Verify the token is valid
-        const data = jwt.verify(token, key);
         //req.connectUser = data.username;
-        return true;
+        //console.log("token in is log in - ",token);
+        return await jwt.verify(token, key);
     } catch (err) {
-        return false;
+        return null;
     }
 }
 
 const getUsername = async (token) =>{
     try {
         const data = jwt.verify(token, key);
-        return  data.username;
+        const userName = data.username;
+        console.log(userName);
+        return userName;
     } catch (err) {
         return null;
     }
