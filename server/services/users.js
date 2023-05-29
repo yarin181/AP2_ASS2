@@ -1,17 +1,20 @@
-const { UsersPassName, UsersPass, Users } = require('../models/users.js');
+const { UsersPassName, UsersPass, Users} = require('../models/users.js');
 
 // the POST action
 const addUser = async (username, password, displayName, profilePic) => {
     //there is already username like this in the data
-    // if(!UsersPass.findOne({username :username})){
-    //     console.log("username already exists");
-    //     return null;
-    // }
+
+    const result = await UsersPassName.findOne({ [username]: username });
+    //console.log(result);
+    if(!result){
+        //console.log("username already exists");
+        return null;
+    }
     // Update usersPassName table
     const newUserPassName = await new UsersPassName({ username, password, displayName, profilePic });
     await newUserPassName.save();
 
-    console.log("use registered - ",newUserPassName);
+    //console.log("use registered - ",newUserPassName);
     // Update usersPass table
     const newUserPass =await new UsersPass({ username, password });
     await newUserPass.save();
@@ -30,9 +33,9 @@ const addUser = async (username, password, displayName, profilePic) => {
 
 // the GET action
 const getUser = async (username) => {
-    console.log("in get user",username)
+    //console.log("in get user",username)
     const user = await Users.findOne({username: username});
-    console.log("the get user is - " , user);
+    //console.log("the get user is - " , user);
     return user;
 };
 

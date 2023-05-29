@@ -1,5 +1,5 @@
-const {Chats,Messages  } = require('../models/chat.js');
-//const {getUser} = require('../services/users.js');
+const {Chats,Messages } = require('../models/chat.js');
+const {getUser} = require('../services/users.js');
 //const chat = require("../../src/chat_components/Chat");
 let contactID=0;
 let messageID=0;
@@ -20,18 +20,36 @@ const getChats = async (username) => {
     //Find all documents in chats that contain {username}
     const contacts = await findDocuments(username);
     // Loop through the documents
-    Chats.forEach((chat) => {
-        const { users } = chat;
-        const foundUser = users.find((user) => user.username === username);
-        if (foundUser) {
-            const otherUser = users.find((user) => user.username !== username);
-            if (otherUser) {
-                contactID++;
-                const lastMessage = chat.messages.length > 0 ? chat.messages[chat.messages.length - 1] : null;
-                jsonArray.push({ id: contactID, user: otherUser, lastMessage}) ;
+    const chats = await Chats.find(); // Retrieve all chats
+    console.log("here are the chats: ", chats)
+    if(chats !== null){
+        // Iterate over each chat
+        chats.forEach(chat => {
+            const { users } = chat;
+            const foundUser = users.find((user) => user.username === username);
+            if (foundUser) {
+                const otherUser = users.find((user) => user.username !== username);
+                if (otherUser) {
+                    contactID++;
+                    const lastMessage = chat.messages.length > 0 ? chat.messages[chat.messages.length - 1] : null;
+                    jsonArray.push({ id: contactID, user: otherUser, lastMessage}) ;
+                }
             }
-        }
-    });
+        });
+    }
+
+    // Chats.forEach((chat) => {
+    //     const { users } = chat;
+    //     const foundUser = users.find((user) => user.username === username);
+    //     if (foundUser) {
+    //         const otherUser = users.find((user) => user.username !== username);
+    //         if (otherUser) {
+    //             contactID++;
+    //             const lastMessage = chat.messages.length > 0 ? chat.messages[chat.messages.length - 1] : null;
+    //             jsonArray.push({ id: contactID, user: otherUser, lastMessage}) ;
+    //         }
+    //     }
+    // });
     return jsonArray;
 }
 
@@ -40,21 +58,35 @@ const getChats = async (username) => {
 //add contact (POST/api/chat)
 const addChat = async (username,newContact) => {
     const json = {};
-    const users=[]
+    //const users=[]
     //add register user
-    const newUser = getUser(newContact);
-    const user = getUser(username);
+    const newUser = await getUser(newContact);
+    const user = await getUser(username);
     if(newUser && user){
         //insert the users to the users array;
-        users.push(user);
-        users.push(newUser);
+        //const users = [user,newUser];
+        // users.push(user);
+        // users.push(newUser);
         //new chat id
-        contactID++;
+        contactID = await Chats.countDocuments();
+
         //empty messages array
-        const msgArr=[];
-        const newChat = new Chats(contactID,users,msgArr);
+        //const msgArr=[];
+        //console.log("contactId : ",contactID,"user :" ,users,"msg arr-" ,msgArr)
+        const newChat = await new Chats({
+            "id": contactID,
+            "users" : [user,newUser],
+            "messages": []
+        });
         await newChat.save();
-        return json.push({contactID,user,msgArr})
+        //console.log("the new chat is -",newChat);
+        // console.log("newChat 0", newChat.users);
+        //console.log("newChat 1", newChat.users[1]);
+        //return json.push({contactID,user,msgArr})
+        return {
+            "id": contactID,
+            "user" :newUser
+        }
     }
     //user not found
     return null;
