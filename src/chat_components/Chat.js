@@ -184,6 +184,7 @@ function Chat(props){
             // Initialization code
             await getUsersWithToken();
             await getUser();
+            console.log("user token - ",props.token)
             console.log("contacts: ",contactsList)
         };
 

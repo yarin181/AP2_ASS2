@@ -30,7 +30,7 @@ const chatsSchema = new Schema({
     //an array of users
     users: [{
         type: Schema.Types.ObjectId,
-        ref: Users,
+        ref: 'Users',
         required: true
     }],
     //an array of messages

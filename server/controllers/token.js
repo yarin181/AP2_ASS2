@@ -7,14 +7,14 @@ const isLoggedIn = async (req, res, next) => {
         const tokenJson = req.headers.authorization.split(" ")[1]
         data = JSON.parse(tokenJson)
         const tokenValue = data['token']
-        console.log("token -",req.headers.authorization.split(" ")[1].valueOf());
-        console.log("token in 12 -",tokenJson);
+        //console.log("token -",req.headers.authorization.split(" ")[1].valueOf());
+        //console.log("token in 12 -",tokenJson);
         const return_val = await service.isLoggedInCheck(tokenValue);
-        console.log("is log in return val -",return_val);
+        //console.log("is log in return val -",return_val);
         if (return_val) {
             req.headers.connectedUser = return_val.username
-            console.log("return val- ", return_val.username);
-            console.log("connectUser- ", req.headers.connectedUser);
+            //console.log("return val- ", return_val.username);
+            //console.log("connectUser- ", req.headers.connectedUser);
             return next();
         } else {
             res.status(401).send("Invalid Token");

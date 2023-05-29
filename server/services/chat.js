@@ -79,7 +79,7 @@ const addChat = async (username,newContact) => {
             "messages": []
         });
         await newChat.save();
-        console.log("the new chat is -",newChat);
+        //console.log("the new chat is -",newChat);
         // console.log("newChat 0", newChat.users);
         //console.log("newChat 1", newChat.users[1]);
         //return json.push({contactID,user,msgArr})
