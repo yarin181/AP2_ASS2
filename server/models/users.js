@@ -46,8 +46,32 @@ const usersSchema = new Schema({
     }
 });
 
+
+const usersDataSchema = new Schema({
+    username: {
+        type: String,
+        required: true,
+        unique: true
+
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    displayName: {
+        type: String,
+        required: true
+    },
+    profilePic: {
+        type: String,
+        required: true
+    }
+});
+
 const UsersPassName = model('usersPassName', usersPassNameSchema);
 const UsersPass = model('usersPass', usersPassSchema);
 const Users = model('users', usersSchema);
+const usersData = model('usersData', usersDataSchema);
 
-module.exports = { UsersPassName, UsersPass, Users };
+//module.exports = { UsersPassName, UsersPass, Users, usersDate};
+module.exports = {usersData};
