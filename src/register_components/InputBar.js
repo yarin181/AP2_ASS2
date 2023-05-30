@@ -50,15 +50,18 @@ function InputBar({ id ,string,Hide=false,onChange,validPassword=false,setAlert,
                        onChange={handleChange} onBlur={handleBlur} />
             )}
             </td>
-            {showTooltip && id === "password" && (
-                //the tooltip
-               <div id="tooltip" className="fadeInLeft">
-                   The password must contain:<br/>
+            <td>
+                {showTooltip && id === "password" && (
+                    //the tooltip
+                    <div id="tooltip" className="fadeInLeft">
+                        The password must contain:<br/>
                         1. At least one capital letter.<br/>
                         2. At least one digit.<br/>
                         3. Length of 8-16 characters.
-               </div>
-            )}
+                    </div>
+                )}
+            </td>
+
         </tr>
 
     );

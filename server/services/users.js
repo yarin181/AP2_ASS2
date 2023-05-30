@@ -1,58 +1,50 @@
 const { UsersPassName, UsersPass, Users} = require('../models/users.js');
 
-// the POST action
+const {usersData} = require('../models/users.js');
 const addUser = async (username, password, displayName, profilePic) => {
-    //there is already username like this in the data
+    try {
+        // Create a new user document
+        const newUser = await new usersData({
+            username,
+            password,
+            displayName,
+            profilePic
+        });
 
-    const result = await UsersPassName.findOne({ "username": username });
-    //console.log(result);
-    if(result){
-        console.log("username already exists");
-        return null;
+        // Save the new user to the collection
+        await newUser.save();
+
+        // Return the newly created user document
+        return 200;
+    } catch (error) {
+        // Handle any errors that occurred during the process, user is already exist
+        return 409;
     }
-    // Update usersPassName table
-    const newUserPassName = await new UsersPassName({ username, password, displayName, profilePic });
-    await newUserPassName.save();
-
-    //console.log("use registered - ",newUserPassName);
-    // Update usersPass table
-    const newUserPass =await new UsersPass({ username, password });
-    await newUserPass.save();
-
-    // Update users table
-    const newUser = await new Users({ username, displayName, profilePic });
-    await newUser.save();
-
-    return {
-        newUserPassName,
-        newUserPass,
-        newUser
-    };
-
 };
 
-// the GET action
-const getUser = async (username) => {
-    //console.log("in get user",username)
-    const user = await Users.findOne({username: username});
-    //console.log("the get user is - " , user);
-    return user;
+//the GET action
+const getUserDetails = async (username) => {
+   const user = await usersData.findOne({username: username});
+    return {
+        "username": username,
+        "displayName" : user.displayName,
+        "profilePic": user.profilePic
+    }
+
 };
 
 
 //check if the username found when user logIn
 const validUserPassword = async (username, password) => {
-    const user = await UsersPass.findOne({ username });
-    if (!user){
-        return false
-    }else{
-        return await user.password === password
+    const user = await usersData.findOne({ username });
+    if (user && user.password === password) {
+        return true; // Username does not exist
     }
-    // console.log("user is: ",user);
-
-
-    // return return_val;
+    return false;
 
 };
 
-module.exports = { getUser, addUser,validUserPassword};
+
+// module.exports = { getUser, addUser,validUserPassword};
+module.exports = {addUser,getUserDetails,validUserPassword};
+

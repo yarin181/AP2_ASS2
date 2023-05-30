@@ -1,5 +1,3 @@
-//const {validUserPassword} = require('../services/token.js');
-
 const jwt = require("jsonwebtoken")
 
 const key = "Some super secret key shhhhhhhhhhhhhhhhh!!!!!"

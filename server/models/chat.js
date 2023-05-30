@@ -10,7 +10,7 @@ const messageSchema = new Schema({
     },
     created: {
         type: String,
-        required: true
+        default: Date.now
     },
     sender: {
         type: Schema.Types.ObjectId,

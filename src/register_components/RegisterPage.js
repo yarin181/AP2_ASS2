@@ -47,7 +47,8 @@ function RegisterPage(props) {
     // const inputRef = useRef(null);
     //the function validate the uploaded pic
     function passwordValidation(password){
-        const passwordRegex = /^(?=.*\d)(?=.*[A-Z]).{8,16}$/
+        const passwordRegex = /^(?=.*\d)(?=.*[A-Z]).{2,16}$/
+
         setIsValid(passwordRegex.test(password));
 
     }
@@ -55,6 +56,7 @@ function RegisterPage(props) {
     //the function validate the password
     function picValidation(picFileName){
         const regex = /([^\\s]+(\.(?:jpe?g|png|gif|bmp|JPG))$)/;
+        return true;
         return (regex.test(picFileName));
         //setIsValid(passwordRegex.test(picFileName));
     }
@@ -150,7 +152,6 @@ function RegisterPage(props) {
     //     }
     // }
     async function addUser(newUser){
-        //console.log("in add user");
         try {
             const response = await fetch('http://localhost:5000/api/users', {
                 method: 'POST',
