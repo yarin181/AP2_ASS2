@@ -57,7 +57,7 @@ const getChats = async (username) => {
 
 //add contact (POST/api/chat)
 const addChat = async (username,newContact) => {
-    const json = {};
+    //const json = {};
     //const users=[]
     //add register user
     const newUser = await getUser(newContact);
@@ -69,7 +69,6 @@ const addChat = async (username,newContact) => {
         // users.push(newUser);
         //new chat id
         contactID = await Chats.countDocuments();
-
         //empty messages array
         //const msgArr=[];
         //console.log("contactId : ",contactID,"user :" ,users,"msg arr-" ,msgArr)

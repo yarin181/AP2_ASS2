@@ -4,10 +4,10 @@ const { UsersPassName, UsersPass, Users} = require('../models/users.js');
 const addUser = async (username, password, displayName, profilePic) => {
     //there is already username like this in the data
 
-    const result = await UsersPassName.findOne({ [username]: username });
+    const result = await UsersPassName.findOne({ "username": username });
     //console.log(result);
-    if(!result){
-        //console.log("username already exists");
+    if(result){
+        console.log("username already exists");
         return null;
     }
     // Update usersPassName table
