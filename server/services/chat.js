@@ -37,7 +37,7 @@ const getChats = async (username) => {
                     else {
                         otherUser = user1;
                     }
-                    console.log(lastMessage);
+                    //console.log(lastMessage);
                     const jsonObject = {
                         "id": chat.id,
                         "user" : otherUser,
@@ -113,11 +113,6 @@ const deleteChat = async (id) => {
 
 //add message to the chat that has this id (POST/api/chats/{id}/messages
 const addMessage = async (id,content,connectUser) => {
-    console.log("in add message");
-    console.log("id -" ,id);
-    console.log("content-",content);
-    console.log("connect User-",connectUser);
-
     const chat = await Chats.findOne({ "id" :id });
     if (chat) {
         const sender = await usersData.findOne({"username" :connectUser});
@@ -126,39 +121,62 @@ const addMessage = async (id,content,connectUser) => {
         if(chatLength === 0){
             messageID = 1;
         }else{
-            messageID = chat.messages[chatLength-1].id + 1;
+            messageID = (await Messages.findOne(chat.messages[chatLength -1])).id + 1;
         }
         const newMessage = await new Messages({
             "id" : messageID,
             "sender" : sender,
             "content" : content
         })
-        await newMessage.save()
-
+        await newMessage.save();
         chat.messages.push(newMessage);
-        console.log("the saved message is : ",{
-            "id" : messageID,
-            "created" : 123,
-            "sender" : sender,
-            "content" : content
-        })
+        // console.log("the saved message is : ",{
+        //     "id" : messageID,
+        //     "created" : 123,
+        //     "sender" : sender,
+        //     "content" : content
+        // })
         await chat.save();
+        return newMessage;
     }
     return null
 };
 
 //return all the message between the login user and the id contact (GET/api/chats/{id}/messages
 const getMessages = async (id) => {
-    const json =[]
-    const chat = await Chats.findOne({ id });
-    if (chat) {
-        chat.forEach((message) => {
-            json.push({ id: message.id, created: message.created,sender:message.sender.username, content:message.content}) ;
-
+    console.log("in get messages");
+    const chatArray =[]
+    const chat = await Chats.findOne({"id" : id});
+    console.log(chat);
+    for (const msg of chat.messages) {
+        const foundMsg = await Messages.findOne(msg);
+        const sender = await usersData.findOne(foundMsg.sender);
+        chatArray.push({
+            "id": foundMsg.id,
+            "created": foundMsg.created,
+            "sender": sender,
+            "content": foundMsg.content
         });
-        return json;
     }
-    return null
+
+    // for (const msg of chat.messages){
+    //     const msg = await Messages.findOne(msg);
+    //     chatArray.push({
+    //         "id" : msg.id,
+    //         "created" : msg.created,
+    //         "sender" : await usersData.findOne(msg.sender),
+    //         "content" : msg.content
+    //     })
+    // }
+    console.log(chatArray);
+    return chatArray;
+    // if (chat) {
+    //     chat.forEach((message) => {
+    //         json.push({ id: message.id, created: message.created,sender:message.sender.username, content:message.content}) ;
+    //
+    //     });
+    //     return json;
+    // }
 };
 
 module.exports = {getChats,addMessage,addChat,deleteChat,getMessages,getChatByID};

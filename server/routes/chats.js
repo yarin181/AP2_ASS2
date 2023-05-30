@@ -7,13 +7,13 @@ chatRouter.route('/')
     .get(isLoggedIn,chatController.getUserContactsList)
     .post(isLoggedIn,chatController.addContact);
 
-chatRouter.route('/:id')
-    .get(isLoggedIn,chatController.getChatWithID)
-    .post(isLoggedIn,chatController.deleteContactByID);
-
-chatRouter.route('/:id/messages')
+chatRouter.route('/:id/Messages')
     .post(isLoggedIn,chatController.addMessageToChatByID)
     .get(isLoggedIn,chatController.getMessagesByID);
+
+chatRouter.route('/:id')
+    .get(isLoggedIn,chatController.getChatWithID)
+    .post(isLoggedIn,chatController.deleteChatByID);
 
 
 module.exports= {chatRouter};

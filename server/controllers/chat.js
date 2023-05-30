@@ -41,7 +41,7 @@ const getChatWithID = async (req,res) =>{
       return res.status(401).send("id not found");
    }
 };
-const deleteContactByID = async (req,res) =>{
+const deleteChatByID = async (req,res) =>{
    //call to the addUser method in services using POST
    if(!res.json(await service.deleteChat(req.id))){
       return res.status(404).send("id not found");
@@ -50,13 +50,13 @@ const deleteContactByID = async (req,res) =>{
 const addMessageToChatByID = async (req,res) =>{
    //call to the addUser method in services using POST
    if(!res.json(await service.addMessage(req.params.id,req.body.msg,req.headers.connectedUser))){
-      return res.status(401).send("chat id not found");
+      return res.status(404).send("chat id not found");
    }
 };
 const getMessagesByID = async (req,res) =>{
    //call to the addUser method in services using POST
-   if(!res.json(await service.deleteChat(req.id))){
-      return res.status(401).send("id not found");
+   if(!res.json(await service.getMessages(req.params.id))){
+      return res.status(404).send("id not found");
    }
 };
-module.exports = {getMessagesByID,addMessageToChatByID,deleteContactByID,getChatWithID,addContact,getUserContactsList}
+module.exports = {getMessagesByID,addMessageToChatByID,deleteChatByID,getChatWithID,addContact,getUserContactsList}
