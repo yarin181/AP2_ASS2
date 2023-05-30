@@ -71,7 +71,7 @@ function Login(props){
    async function getToken(user) {
         //create the json user
         try {
-            const response = await fetch('http://localhost:5000/api/Token', {
+            const response = await fetch('http://localhost:5000/api/Tokens', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -110,7 +110,6 @@ function Login(props){
         }
     }
 
-
     //navigate to different pages
     if (needToSignUp) {
         return <Navigate to="/registerPage" />;
@@ -118,7 +117,6 @@ function Login(props){
     if(isRegisteredUser){
         return <Navigate to="/chat" />;
     }
-
 
     return(
         <div
