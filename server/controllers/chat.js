@@ -7,7 +7,7 @@ const getUserContactsList = async (req,res) =>{
    const token = req.headers.authorization.split(" ")[1]
    //call to the addUser method in services using POST
    if(token){
-      console.log(req.headers.connectedUser);
+      //console.log(req.headers.connectedUser);
       res.json(await service.getChats(req.headers.connectedUser));
    }
    else{
