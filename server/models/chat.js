@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Users = require('../models/users.js');
 
 const { Schema } = mongoose;
 
@@ -14,7 +13,7 @@ const messageSchema = new Schema({
     },
     sender: {
         type: Schema.Types.ObjectId,
-        ref: 'Users',
+        ref: 'usersData',
         required: true
     },
     content: {
@@ -30,7 +29,7 @@ const chatsSchema = new Schema({
     //an array of users
     users: [{
         type: Schema.Types.ObjectId,
-        ref: 'Users',
+        ref: 'usersData',
         required: true
     }],
     //an array of messages

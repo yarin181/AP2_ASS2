@@ -24,7 +24,7 @@ const addUser = async (username, password, displayName, profilePic) => {
 
 //the GET action
 const getUserDetails = async (username) => {
-   const user = await usersData.findOne({username: username});
+   const user = await usersData.findOne({username: username})
     return {
         "username": username,
         "displayName" : user.displayName,
@@ -41,7 +41,6 @@ const validUserPassword = async (username, password) => {
         return true; // Username does not exist
     }
     return false;
-
 };
 
 
