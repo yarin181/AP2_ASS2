@@ -10,7 +10,7 @@ const messageSchema = new Schema({
     },
     created: {
         type: String,
-        default: Date.now
+        default: Date
     },
     sender: {
         type: Schema.Types.ObjectId,
@@ -34,7 +34,11 @@ const chatsSchema = new Schema({
         required: true
     }],
     //an array of messages
-    messages: [messageSchema]
+    messages: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Messages',
+        required: true
+    }]
 });
 
 const Messages = mongoose.model('Message', messageSchema);

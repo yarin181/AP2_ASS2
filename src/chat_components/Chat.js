@@ -179,11 +179,12 @@ function Chat(props){
 
       const addContact = async (newContact) => {
           setShowAlert(false);
-          const validChat = await postContact(newContact);
-          if (validChat) {
+          const validContact = await postContact(newContact);
+          if (validContact) {
               await getUsersWithToken();
           }
           // setContactsList([...contactsList, newContact]);
+
       };
     const handleError = (errorMsg) =>{
         setErrorMessage(errorMsg);
@@ -215,8 +216,8 @@ function Chat(props){
     useEffect(() => {
         const fetchData = async () => {
             // Initialization code
-            await getUsersWithToken();
             await getUser();
+            await getUsersWithToken();
             console.log("user token - ",props.token)
             console.log("contacts: ",contactsList)
         };
