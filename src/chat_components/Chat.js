@@ -123,17 +123,7 @@ function Chat(props){
         }
     }
 
-
-
-    // const connectUser = {
-    //     username: props.currentUser.username,
-    //     password: props.currentUser.password,
-    //     displayName: props.currentUser.displayName,
-    //     profilePic : props.currentUser.image
-    // }
-
     const [currentContact, setContact] = useState('');
-
 
     const handleItemClick = (ContactInfo) => {
         setContact(ContactInfo);
@@ -149,7 +139,6 @@ function Chat(props){
           if (validContact) {
               await getUsersWithToken();
           }
-          // setContactsList([...contactsList, newContact]);
 
       };
     const handleError = (errorMsg) =>{
@@ -159,8 +148,6 @@ function Chat(props){
     }
     const addMessage = async (newMsg, id) => {
         const msgJson= {msg:newMsg}
-        // console.log(newMsg)
-        // console.log(id)
         await postMessage( msgJson, id)
         await getUsersWithToken();
         setTemp(temp+1)
@@ -182,8 +169,8 @@ function Chat(props){
     useEffect(() => {
         const fetchData = async () => {
             // Initialization code
-            await getUsersWithToken();
             await getUser();
+            await getUsersWithToken();
             console.log("user token - ",props.token)
             console.log("contacts: ",contactsList)
         };

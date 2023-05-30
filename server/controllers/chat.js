@@ -3,16 +3,19 @@ const {getUsername} = require('../services/token.js');
 
 
 const getUserContactsList = async (req,res) =>{
-   //grt the token
-   const token = req.headers.authorization.split(" ")[1]
-   //call to the addUser method in services using POST
-   if(token){
-      //console.log(req.headers.connectedUser);
-      res.json(await service.getChats(req.headers.connectedUser));
-   }
-   else{
-      return res.status(401).send("Invalid Token");
-   }
+   res.json(await service.getChats(req.headers.connectedUser));
+
+
+   // //grt the token
+   // const token = req.headers.authorization.split(" ")[1]
+   // //call to the addUser method in services using POST
+   // if(token){
+   //    //console.log(req.headers.connectedUser);
+   //
+   // }
+   // else{
+   //    return res.status(401).send("Invalid Token");
+   // }
 };
 const addContact = async (req,res) =>{
    //console.log("in add contact");
@@ -46,7 +49,7 @@ const deleteContactByID = async (req,res) =>{
 };
 const addMessageToChatByID = async (req,res) =>{
    //call to the addUser method in services using POST
-   if(!res.json(await service.addMessage(req.id,req.body.created,req.body.sender,req.body.content))){
+   if(!res.json(await service.addMessage(req.params.id,req.body.msg,req.headers.connectedUser))){
       return res.status(401).send("chat id not found");
    }
 };

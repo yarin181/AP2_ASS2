@@ -86,7 +86,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 app.use(cors());
 app.use('/api/Chats',chatRouter);
 app.use('/api/Users',usersRouter);
-app.use('/api/Token',tokenRouter);
+app.use('/api/Tokens',tokenRouter);
 
 
 app.listen(port, () => {
