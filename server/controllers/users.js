@@ -1,5 +1,6 @@
 const service = require('../services/users.js')
 const registerUser = async (req,res) =>{
+   console.log("in register user")
    //call to the addUser method in services using POST
    const status = await service.addUser(req.body.username,req.body.password,req.body.displayName,req.body.profilePic);
    //

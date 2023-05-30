@@ -31,7 +31,7 @@ const processLogIn = async (req, res) => {
         // Return the token to the browser
         return res.status(201).json({token});
     } else {
-        //console.log("in else");
+        console.log("in else");
         // Incorrect username/password. The user should try again.
         return res.status(404).send('Invalid username and/or password')
     }

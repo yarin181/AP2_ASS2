@@ -47,17 +47,16 @@ function RegisterPage(props) {
     // const inputRef = useRef(null);
     //the function validate the uploaded pic
     function passwordValidation(password){
-        const passwordRegex = /^(?=.*\d)(?=.*[A-Z]).{2,16}$/
-
+        const passwordRegex = /^(?=.*\d)(?=.*[A-Z]).{8,16}$/
         setIsValid(passwordRegex.test(password));
 
     }
 
     //the function validate the password
     function picValidation(picFileName){
-        const regex = /([^\\s]+(\.(?:jpe?g|png|gif|bmp|JPG))$)/;
-        return true;
-        return (regex.test(picFileName));
+        // const regex = /([^\\s]+(\.(?:jpe?g|png|gif|bmp|JPG))$)/;
+        // return (regex.test(picFileName));
+        return true
         //setIsValid(passwordRegex.test(picFileName));
     }
       //the function confirmPassword

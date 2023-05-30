@@ -17,7 +17,7 @@ function Login(props){
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     //check if the user submitted the form or not
-    const [isSubmitted,setIsSubmitted] = useState(false)
+    const [wrongUser,setIsWrongUser] = useState(false)
 
     const [usernameClassContent,setUsernameClassContent] = useState('form-control log-in-input')
     const [passwordClassContent,setPasswordClassContent] = useState('form-control log-in-input')
@@ -44,7 +44,6 @@ function Login(props){
     //pressing the log-in button
     async function handleSubmit(event) {
         event.preventDefault();
-        setIsSubmitted(true)
         const user = {
             username: username,
             password: password
@@ -55,7 +54,13 @@ function Login(props){
             props.setCurrentUser(user);
             props.setIsConnected(true);
             setIsRegisteredUser(true);
+        }else{
+            setUsernameClassContent("form-control is-invalid log-in-input")
+            setPasswordClassContent("form-control is-invalid log-in-input")
+            setIsWrongUser(true)
         }
+
+
 
         // const user = props.usersList.find(c => c.username === username);
         //the user exists and the password is correct:
@@ -65,18 +70,19 @@ function Login(props){
 
             // }
         // }
-        setUsernameClassContent("form-control is-invalid log-in-input")
-        setPasswordClassContent("form-control is-invalid log-in-input")
+
     }
    async function getToken(user) {
         //create the json user
         try {
-            const response = await fetch('http://localhost:5000/api/Token', {
+            console.log(JSON.stringify(user))
+            const response = await fetch('http://localhost:5000/api/Tokens', {
                 method: 'POST',
                 headers: {
+                    // 'accept': '*/*',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(user)
+                body:JSON.stringify(user)
             });
             //console.log("after get token",await response.text());
             if (response.ok) {
@@ -133,8 +139,7 @@ function Login(props){
                     <br />
                     <label  htmlFor="password">Password:</label>
                     <input onChange={handlePasswordChange} className={passwordClassContent}  type="password" id="password" name="password" />
-
-                    {isSubmitted ? (
+                    {wrongUser ? (
                         <p id="alert_message">
                             username or password is incorrect
                         </p>

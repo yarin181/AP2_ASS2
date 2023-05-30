@@ -21,6 +21,7 @@ function Chat(props){
         props.setIsConnected(false)
         setLogOut(true);
     }
+    //getting the user information
     async function getUser() {
         const token= props.token;
         const url = `http://localhost:5000/api/Users/${props.currentUser.username}`;
@@ -41,10 +42,11 @@ function Chat(props){
             setConnectUser(data)
         } catch (error) {
             console.error('Error:', error.message);
+            handleLogOut()
         }
     }
 
-
+    //getting the chats of the user
     async function getUsersWithToken() {
         const token= props.token;
         // console.log("this is the token: ",token)
@@ -54,7 +56,8 @@ function Chat(props){
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${token}` // Add the token as an 'Authorization' header
+                    'Authorization': `Bearer ${token}`, // Add the token as an 'Authorization' header
+                    // 'Content-Type': 'application/json'
                 }
             });
 
@@ -63,10 +66,11 @@ function Chat(props){
             }
 
             const data = await response.json();
-            //console.log('Users:', data);
+            console.log('Users: ', data);
             setContactsList(data)
         } catch (error) {
             console.error('Error:', error.message);
+            handleLogOut()
         }
     }
     async function postContact(newUser){
@@ -83,13 +87,15 @@ function Chat(props){
             });
             if (response.ok) {
                 const data = await response.json();
+
                 setContact(data)
-                //console.log(data);
+                console.log("the user data", data);
                 return 1
             } else if(response.status === 400){
                 handleError("user doesn't exist");
             }else{
                 console.error('Request failed');
+                handleLogOut()
                 return 0
             }
         } catch (error) {
@@ -119,9 +125,37 @@ function Chat(props){
             }
         } catch (error) {
             console.error(error);
+            handleLogOut()
             return 0
         }
     }
+    // async function getChat(id) {
+    //     const token = props.token;
+    //     // console.log("this is the token: ",token)
+    //     const url = `http://localhost:5000/api/Chats/${id}`;
+    //
+    //     try {
+    //         const response = await fetch(url, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'Authorization': `Bearer ${token}`, // Add the token as an 'Authorization' header
+    //                 // 'Content-Type': 'application/json'
+    //             }
+    //         });
+    //
+    //         if (!response.ok) {
+    //             throw new Error(`HTTP error! Status: ${response.status}`);
+    //         }
+    //         const data = await response.json();
+    //         console.log("new contact: ", data)
+    //         console.log("contact list before: ", contactsList)
+    //         // setContactsList([...contactsList,data])
+    //         // console.log("contact list before: ", contactsList)
+    //
+    //     } catch (error) {
+    //         console.error('Error:', error.message);
+    //     }
+    // }
 
 
 
@@ -145,12 +179,11 @@ function Chat(props){
 
       const addContact = async (newContact) => {
           setShowAlert(false);
-          const validContact = await postContact(newContact);
-          if (validContact) {
+          const validChat = await postContact(newContact);
+          if (validChat) {
               await getUsersWithToken();
           }
           // setContactsList([...contactsList, newContact]);
-
       };
     const handleError = (errorMsg) =>{
         setErrorMessage(errorMsg);
