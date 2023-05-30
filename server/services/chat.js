@@ -130,21 +130,14 @@ const addMessage = async (id,content,connectUser) => {
         })
         await newMessage.save();
         chat.messages.push(newMessage);
-        // console.log("the saved message is : ",{
-        //     "id" : messageID,
-        //     "created" : 123,
-        //     "sender" : sender,
-        //     "content" : content
-        // })
         await chat.save();
         return newMessage;
     }
     return null
 };
 
-//return all the message between the login user and the id contact (GET/api/chats/{id}/messages
+///return all the message between the login user and the id contact (GET/api/chats/{id}/messages
 const getMessages = async (id) => {
-    console.log("in get messages");
     const chatArray =[]
     const chat = await Chats.findOne({"id" : id});
     console.log(chat);
@@ -158,25 +151,7 @@ const getMessages = async (id) => {
             "content": foundMsg.content
         });
     }
-
-    // for (const msg of chat.messages){
-    //     const msg = await Messages.findOne(msg);
-    //     chatArray.push({
-    //         "id" : msg.id,
-    //         "created" : msg.created,
-    //         "sender" : await usersData.findOne(msg.sender),
-    //         "content" : msg.content
-    //     })
-    // }
-    console.log(chatArray);
     return chatArray;
-    // if (chat) {
-    //     chat.forEach((message) => {
-    //         json.push({ id: message.id, created: message.created,sender:message.sender.username, content:message.content}) ;
-    //
-    //     });
-    //     return json;
-    // }
 };
 
 module.exports = {getChats,addMessage,addChat,deleteChat,getMessages,getChatByID};
