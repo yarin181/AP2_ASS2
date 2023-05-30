@@ -4,6 +4,7 @@ const { usersData} = require("../models/users");
 
 
 
+
 //return all contacts (GET/api/chat)
 const getChats = async (username) => {
     const jsonArray = [];
