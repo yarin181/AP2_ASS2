@@ -1,8 +1,5 @@
 const {Chats,Messages } = require('../models/chat.js');
-const {getUserDetails} = require('../services/users.js');
 const { usersData} = require("../models/users");
-
-
 
 
 //return all contacts (GET/api/chat)
@@ -66,16 +63,13 @@ const getChats = async (username) => {
 };
 
 
-
-
-
 //add contact (POST/api/chat)
 const addChat = async (username, newContact) => {
     if (username === newContact) {
         return 400;
     }
 
-    const newUser = await usersData.findOne({ username: newContact });
+    let newUser = await usersData.findOne({ username: newContact });
     const user = await usersData.findOne({ username: username });
 
     if (newUser && user) {
@@ -92,10 +86,15 @@ const addChat = async (username, newContact) => {
             "messages": []
         });
         await newChat.save();
-
+        newUser = await newUser.populate("username displayName profilePic");
+        const jsonObject = {
+            "username": newUser.username,
+            "displayName": newUser.displayName,
+            "profilePic": newUser.profilePic
+        };
         return {
             "id": chatID,
-            "user": newUser
+            "user": jsonObject
         };
     }
 
@@ -113,21 +112,34 @@ const getChatByID = async (id) => {
 
         for (const msg of chat.messages) {
             const newMsg = await Messages.findOne({ _id: msg });
+            const msgWithSender = await Messages
+                .findOne({ _id: newMsg._id })
+                .populate({
+                    path: 'sender',
+                    select: 'username displayName profilePic',
+                    model: 'usersData'
+                })
+                .lean();
+            const theSender = await usersData.findOne(newMsg.sender);
+            const sender =
             messageArray.push({
-                id: newMsg.id,
-                created: newMsg.created,
-                sender: newMsg.sender,
-                content: newMsg.content
+                "id": newMsg.id,
+                "created": newMsg.created,
+                "sender": {
+                    "username" : theSender.username,
+                    "displayName" :theSender.displayName,
+                    "profilePic" : theSender.profilePic
+                },
+                "content": newMsg.content
             });
         }
 
         for (const user of chat.users) {
-            const newUser = await usersData.findOne({ _id: user });
+            const newUser = await usersData.findOne({ _id: user }).populate('username displayName profilePic')
             usersArray.push({
-                username: newUser.username,
-                password: newUser.password,
-                displayName: newUser.displayName,
-                profilePic: newUser.profilePic
+                "username": newUser.username,
+                "displayName": newUser.displayName,
+                "profilePic": newUser.profilePic
             });
         }
 
@@ -154,26 +166,34 @@ const addMessage = async (id,content,connectUser) => {
 
     const chat = await Chats.findOne({ "id" :id });
     if (chat) {
-        const sender = await usersData.findOne({"username" :connectUser});
-        let chatLength = chat.messages.length;
+        let sender = await usersData.findOne({"username" :connectUser})
 
-        const maxMessageID = await Chats.findOne().sort('-id').limit(1).exec();
+        const maxMessageID = await Messages.findOne().sort('-id').limit(1).exec();
         let messageID = 1;
-
-        if (maxMessageID) {
+        if (maxMessageID && maxMessageID.id) {
             messageID = maxMessageID.id + 1;
         }
-
-
         const newMessage = await new Messages({
+            "id": messageID,
+            "sender": sender,
+            "content": content
+        });
+
+        const filteredSender = await sender.populate('username displayName profilePic')
+        const returnVal={
             "id" : messageID,
-            "sender" : sender,
+            "created": new Date(),
+            "sender" :  {   "username": filteredSender.username,
+                            "displayName": filteredSender.displayName,
+                            "profilePic": filteredSender.profilePic
+                        },
             "content" : content
-        })
+        }
+
         await newMessage.save();
         chat.messages.push(newMessage);
         await chat.save();
-        return newMessage;
+        return returnVal;
     }
     return null
 };
@@ -184,17 +204,19 @@ const getMessages = async (id) => {
     const chat = await Chats.findOne({"id" : id});
     for (const msg of chat.messages) {
         const foundMsg = await Messages.findOne(msg);
-        const sender = await usersData.findOne(foundMsg.sender);
+        const sender = await usersData.findOne(foundMsg.sender).populate('username')
         chatArray.push({
             "id": foundMsg.id,
             "created": foundMsg.created,
-            "sender": sender,
+            "sender": {
+                "username":sender.username
+            },
             "content": foundMsg.content
         });
     }
+    console.log(chatArray);
     return chatArray;
 
 };
-
 module.exports = {getChats,addMessage,addChat,deleteChat,getMessages,getChatByID};
 
