@@ -4,48 +4,33 @@ const {getUsername} = require('../services/token.js');
 
 const getUserContactsList = async (req,res) =>{
    res.json(await service.getChats(req.headers.connectedUser));
-
-
-   // //grt the token
-   // const token = req.headers.authorization.split(" ")[1]
-   // //call to the addUser method in services using POST
-   // if(token){
-   //    //console.log(req.headers.connectedUser);
-   //
-   // }
-   // else{
-   //    return res.status(401).send("Invalid Token");
-   // }
 };
 const addContact = async (req,res) =>{
-   //console.log("in add contact");
    const token = req.headers.authorization.split(" ")[1]
-   //call to the addUser method in services using POST
-   //console.log("21 connect user is - ",req.headers.connectedUser);
-   //console.log("to add user user is - ",req.body.username);
-   if(token){
-     if (res.json(await service.addChat(req.headers.connectedUser,req.body.username))){
-        //console.log("the caht added!")
-        //return res.status(400).send("No such user");
-     }
+   const returnVal  = await service.addChat(req.headers.connectedUser,req.body.username);
+   if(!returnVal){
+      //user not found
+      return res.status(400);
    }
-   else{
-      //console.log("the caht NOT add!");
-      return res.status(401).send("Invalid Token");
+   if(returnVal === 400){
+      return res.status(400).send("Thou shalt not talk with thy self");
    }
-
+   return res.status(200).send(returnVal);
 };
 const getChatWithID = async (req,res) =>{
+   const returnVal = await service.getChatByID(req.id);
    //call to the addUser method in services using POST
-   if(!res.json(await service.getChatByID(req.id))){
-      return res.status(401).send("id not found");
+   if(!returnVal){
+      return res.status(401).send("Not found");
    }
+   return res.status(200).send(returnVal);
 };
 const deleteChatByID = async (req,res) =>{
    //call to the addUser method in services using POST
    if(!res.json(await service.deleteChat(req.id))){
-      return res.status(404).send("id not found");
+      return res.status(404).send("Not found");
    }
+   return res.status(200)
 };
 const addMessageToChatByID = async (req,res) =>{
    //call to the addUser method in services using POST
