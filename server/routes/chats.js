@@ -13,7 +13,7 @@ chatRouter.route('/:id/Messages')
 
 chatRouter.route('/:id')
     .get(isLoggedIn,chatController.getChatWithID)
-    .post(isLoggedIn,chatController.deleteChatByID);
+    .delete(isLoggedIn,chatController.deleteChatByID);
 
 
 module.exports= {chatRouter};

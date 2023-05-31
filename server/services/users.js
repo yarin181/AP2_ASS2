@@ -15,7 +15,11 @@ const addUser = async (username, password, displayName, profilePic) => {
         await newUser.save();
 
         // Return the newly created user document
-        return 200;
+        return {
+            "username" : username,
+            "displayName" : displayName,
+            "profilePic" : profilePic
+        };
     } catch (error) {
         // Handle any errors that occurred during the process, user is already exist
         return 409;
@@ -37,13 +41,8 @@ const getUserDetails = async (username) => {
 //check if the username found when user logIn
 const validUserPassword = async (username, password) => {
     const user = await usersData.findOne({ username });
-    if (user && user.password === password) {
-        return true; // Username does not exist
-    }
-    return false;
+    return user && user.password === password;
 };
 
-
-// module.exports = { getUser, addUser,validUserPassword};
 module.exports = {addUser,getUserDetails,validUserPassword};
 

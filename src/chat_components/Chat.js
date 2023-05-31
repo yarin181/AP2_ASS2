@@ -198,19 +198,6 @@ function Chat(props){
         await postMessage( msgJson, id)
         await getUsersWithToken();
         setTemp(temp+1)
-
-
-        // const index = contactsList.findIndex(contact => contact.name === name);
-        // if (index !== -1){
-        //     const updatedContact = {
-        //         ...contactsList[index],
-        //         chat: [...contactsList[index].chat, newMsg]
-        //     };
-        //     const updatedContactsList = [...contactsList];
-        //     updatedContactsList[index] = updatedContact;
-        //     setContactsList(updatedContactsList);
-        //     console.log(updatedContactsList)
-        // }
     };
 
     useEffect(() => {
