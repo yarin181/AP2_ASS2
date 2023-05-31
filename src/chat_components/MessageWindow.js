@@ -43,10 +43,8 @@ function MessageWindow (props){
 
 
             const data = await response.json();
-            console.log('my data: ', data);
             setMessages(data)
         } catch (error) {
-            console.error('Error:', error.message);
         }
     }
 
