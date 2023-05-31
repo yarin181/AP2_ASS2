@@ -4,6 +4,7 @@
     width: 80vw;
     margin: 1% auto;
     height: 80% ;
+    max-width: 1900px;
     min-height: 770px;
     min-width: 1200px;
     border-radius: 15px;
@@ -30,6 +31,7 @@
     margin-bottom: 0;
 }
 .card-body {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -49,11 +51,10 @@
 #inputName{
     width: 100%;
 }
-#log-out-btn{
-    /*position:absolute;*/
-    /*right: 62.5%;*/
-    /*top :12.5%;*/
-
+#chat-side-space{
+    position: relative;
+    min-height: 790px;
+    height: 90%;
 }
 #title{
     border-radius: 30px 30px 30px 30px
@@ -80,7 +81,7 @@
 #chatBox{
     background-color: rgba(200, 250, 250);
     position: absolute;
-    width: 90%;
+    width: 95%;
     height: 90%;
 }
 #insertBar{
@@ -216,12 +217,21 @@
     border-color: transparent #5bf692 transparent transparent;
     transform: translateY(-90%);
 }
+#bottom-ref-id{
+    position: sticky;
+    overflow: auto;
+    float: right;
+    clear: both;
+    margin-bottom: 50px;
 
+
+
+}
 #message_container{
     position: revert;
     overflow-y: scroll;
     height: 70dvh;
-    min-height: 570px;
+    min-height: 610px;
     margin: auto;
 }
 #nickName{
