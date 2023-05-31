@@ -3,7 +3,6 @@ const {getUsername} = require('../services/token.js');
 
 
 const getUserContactsList = async (req,res) =>{
-   console.log(await service.getChats(req.headers.connectedUser));
    res.json(await service.getChats(req.headers.connectedUser));
 };
 const addContact = async (req,res) =>{
