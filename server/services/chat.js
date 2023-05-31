@@ -103,10 +103,14 @@ const addChat = async (username, newContact) => {
 
 
 //get contact by id (GET/api/chat/{id})
-const getChatByID = async (id) => {
-    const chat = await Chats.findOne({ id: id });
+const getChatByID = async (id,connectUser) => {
+    const chat = await Chats.findOne({ "id": id });
 
     if (chat) {
+
+        if (await inChat(connectUser, chat.users[0], chat.users[1])){
+            return null
+        }
         const messageArray = [];
         const usersArray = [];
 
@@ -121,7 +125,6 @@ const getChatByID = async (id) => {
                 })
                 .lean();
             const theSender = await usersData.findOne(newMsg.sender);
-            const sender =
             messageArray.push({
                 "id": newMsg.id,
                 "created": newMsg.created,
@@ -150,14 +153,14 @@ const getChatByID = async (id) => {
         };
     }
 
-    return 401;
+    return null;
 };
 
 
 
 //Delete chat by id (POST/api/chat/{id}
 const deleteChat = async (id) => {
-    return Chats.deleteOne({id});
+    return Chats.deleteOne({"id":id});
 };
 
 
@@ -165,9 +168,12 @@ const deleteChat = async (id) => {
 const addMessage = async (id,content,connectUser) => {
 
     const chat = await Chats.findOne({ "id" :id });
-    if (chat) {
-        let sender = await usersData.findOne({"username" :connectUser})
 
+    if (chat) {
+        if (await inChat(connectUser, chat.users[0], chat.users[1])){
+            return null
+        }
+        const sender = await usersData.findOne({"username" : connectUser})
         const maxMessageID = await Messages.findOne().sort('-id').limit(1).exec();
         let messageID = 1;
         if (maxMessageID && maxMessageID.id) {
@@ -197,25 +203,36 @@ const addMessage = async (id,content,connectUser) => {
     }
     return null
 };
+const inChat= async (connected,id1,id2) =>{
+    //check that the sender is in the chat
+    const user1 = await usersData.findOne(id1)
+    const user2 = await usersData.findOne(id2)
+    return !(connected === user1.username || connected === user2.username);
 
+}
 //return all the message between the login user and the id contact (GET/api/chats/{id}/messages
-const getMessages = async (id) => {
+const getMessages = async (id,connectUser) => {
     const chatArray =[]
     const chat = await Chats.findOne({"id" : id});
-    for (const msg of chat.messages) {
-        const foundMsg = await Messages.findOne(msg);
-        const sender = await usersData.findOne(foundMsg.sender).populate('username')
-        chatArray.push({
-            "id": foundMsg.id,
-            "created": foundMsg.created,
-            "sender": {
-                "username":sender.username
-            },
-            "content": foundMsg.content
-        });
+    if(chat){
+        if (await inChat(connectUser, chat.users[0], chat.users[1])){
+            return null
+        }
+        for (const msg of chat.messages) {
+            const foundMsg = await Messages.findOne(msg);
+            const sender = await usersData.findOne(foundMsg.sender).populate('username')
+            chatArray.push({
+                "id": foundMsg.id,
+                "created": foundMsg.created,
+                "sender": {
+                    "username":sender.username
+                },
+                "content": foundMsg.content
+            });
+        }
+        return chatArray;
     }
-    console.log(chatArray);
-    return chatArray;
+    return null;
 
 };
 module.exports = {getChats,addMessage,addChat,deleteChat,getMessages,getChatByID};
