@@ -1,30 +1,17 @@
 import Message from "./Message"
-
-import React, {useEffect, useState} from "react";
+import ReactDOM from 'react-dom';
+import React, {useEffect, useState,useRef} from "react";
 function MessageWindow (props){
     const [messageContent, setMessageContent] = useState('');
     const [messages,setMessages]=useState({})
-
-
-    // const [currentChat, setCurrentChat] = useState()
-
+    const bottomRef = useRef(null);
     const handleSendMessage = () => {
         if (messageContent.length === 0){
             return;
         }
-        // console.log("user :",props.contact)
-        // console.log("user id:",props.contact.id)
-        // const time =Date.now();
-        // const timeObj = new Date(time);
-        // const formattedDate = timeObj.toLocaleDateString('en-GB').toString();
-        // const hours = timeObj.getHours();
-        // const minutes = timeObj.getMinutes();
-        // const formatTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-        // const newMsg = {sender: true, content: messageContent,time: formatTime,date: formattedDate};
         props.addMessage(messageContent,props.contact.id);
-        // getMessages()
-        // contact.chat.push(newMsg)
         setMessageContent('');
+
     };
     async function  getMessages() {
         const token= props.token;
@@ -36,33 +23,35 @@ function MessageWindow (props){
                     'Authorization': `Bearer ${token}` // Add the token as an 'Authorization' header
                 }
             });
-
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-
-
             const data = await response.json();
             setMessages(data)
+            setTimeout(() => {
+                bottomRef.current?.scrollIntoView({
+                behavior: 'smooth'
+            });
+            });
         } catch (error) {
         }
     }
-
-
-
     useEffect(() => {
         const fetchData = async () => {
             // Initialization code
             await getMessages()
-
+            //bottomRef.current?.scrollIntoView({behavior: 'smooth'});
+            //ReactDOM.render(<div />, document.getElementById('message-window'));
         };
-        // Call the async function immediately
         fetchData().then(r => {});
 
         return () => {
-            // Cleanup code (if needed)
         };
     }, [props.contact,props.temp]);
+    // useEffect(() => {
+    //     // 👇️ scroll to bottom every time messages change
+    //     bottomRef.current?.scrollIntoView({behavior: 'smooth'});
+    // }, [messages]);
 
     return (
         <>
@@ -73,6 +62,7 @@ function MessageWindow (props){
                         {props.contact !== null ? messages.length > 0 ? messages.slice().reverse().map((message, index) => (
                             <Message key={index}  msg={message} sender={message.sender.username === props.contact.user.username }/>
                         )): "" : ""}
+                        <div id="bottom-ref-id" ref={bottomRef} />
                     </div>
                 </div>
             </div>

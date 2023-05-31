@@ -20,7 +20,7 @@ function ChatSide({currentContact,addMessage,token,temp}){
         </div>
             <br />
             <MessageWindow token={token} id="msgWindow" contact={currentContact} addMessage={addMessage} temp={temp} />
-        </>
+            </>
 
     );
 }

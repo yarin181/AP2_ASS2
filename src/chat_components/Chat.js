@@ -185,9 +185,9 @@ function Chat(props){
                         <div className="col" id="contacts_area">
                             <ContactsSide user={connectUser} contactsList={contactsList} handleItemClick={handleItemClick} contact={currentContact} handleLogOut={handleLogOut} temp={temp}/>
                         </div>
-                        <div className="col">{
-                            currentContact  ? < ChatSide token = {props.token} currentContact={currentContact} addMessage={addMessage} temp={temp}/>: ""
-                        }
+                        <div className="col"><div id="chat-side-space">
+                            {currentContact  ? < ChatSide token = {props.token} currentContact={currentContact} addMessage={addMessage} temp={temp}/>: ""
+                            }</div>
                         </div>
                     </div>
                 </div>
