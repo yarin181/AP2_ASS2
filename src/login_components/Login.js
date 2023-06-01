@@ -2,8 +2,9 @@
 import icon from "../img/logo-noBack.png"
 import "./login_style.css"
 import {Navigate} from "react-router-dom";
-import  {useState} from "react";
+import {useEffect, useState} from "react";
 import React from "react";
+import io from "socket.io-client";
 
 
 
@@ -17,11 +18,11 @@ function Login(props){
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     //check if the user submitted the form or not
-    const [isSubmitted,setIsSubmitted] = useState(false)
+    const [wrongUser,setIsWrongUser] = useState(false)
 
     const [usernameClassContent,setUsernameClassContent] = useState('form-control log-in-input')
     const [passwordClassContent,setPasswordClassContent] = useState('form-control log-in-input')
-
+    // const socket = io("http://localhost:5000");
 
 
 
@@ -44,18 +45,25 @@ function Login(props){
     //pressing the log-in button
     async function handleSubmit(event) {
         event.preventDefault();
-        setIsSubmitted(true)
         const user = {
             username: username,
             password: password
         };
+
         //finding the user
         const validToken = await getToken(user);
         if(validToken){
+            // socket.emit("foo", "bar");
             props.setCurrentUser(user);
             props.setIsConnected(true);
             setIsRegisteredUser(true);
+        }else{
+            setUsernameClassContent("form-control is-invalid log-in-input")
+            setPasswordClassContent("form-control is-invalid log-in-input")
+            setIsWrongUser(true)
         }
+
+
 
         // const user = props.usersList.find(c => c.username === username);
         //the user exists and the password is correct:
@@ -65,9 +73,37 @@ function Login(props){
 
             // }
         // }
-        setUsernameClassContent("form-control is-invalid log-in-input")
-        setPasswordClassContent("form-control is-invalid log-in-input")
+
     }
+
+
+    useEffect(() => {
+        // socket.on("connect", () => {
+        //     console.log("Connected to WebSocket server");
+        // });
+        //
+        // socket.on("disconnect", () => {
+        //     console.log("Disconnected from WebSocket server");
+        // });
+        //
+        // socket.on("Hello", (data) => {
+        //     console.log("Received 'Hello' message:", data);
+        // });
+    //
+    //     socket.on("hi", () => {
+    //         console.log("Received 'hi' message");
+    //     });
+    //
+    //     socket.on("message", (msg) => {
+    //         console.log("Received message:", msg);
+    //     });
+    //
+    //     // Clean up the WebSocket connection when the component is unmounted
+    //     return () => {
+    //         socket.disconnect();
+    //     };
+    }, []);
+
    async function getToken(user) {
         //create the json user
         try {
@@ -110,6 +146,7 @@ function Login(props){
         }
     }
 
+
     //navigate to different pages
     if (needToSignUp) {
         return <Navigate to="/registerPage" />;
@@ -117,6 +154,7 @@ function Login(props){
     if(isRegisteredUser){
         return <Navigate to="/chat" />;
     }
+
 
     return(
         <div
@@ -131,8 +169,7 @@ function Login(props){
                     <br />
                     <label  htmlFor="password">Password:</label>
                     <input onChange={handlePasswordChange} className={passwordClassContent}  type="password" id="password" name="password" />
-
-                    {isSubmitted ? (
+                    {wrongUser ? (
                         <p id="alert_message">
                             username or password is incorrect
                         </p>

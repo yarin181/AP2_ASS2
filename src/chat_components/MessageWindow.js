@@ -1,11 +1,16 @@
 import Message from "./Message"
+
+import React, {useEffect, useRef, useState} from "react";
 import ReactDOM from 'react-dom';
-import React, {useEffect, useState,useRef} from "react";
+
 function MessageWindow (props){
     const [messageContent, setMessageContent] = useState('');
     const [messages,setMessages]=useState({})
     const bottomRef = useRef(null);
-    const handleSendMessage = () => {
+
+    // const [currentChat, setCurrentChat] = useState()
+    const handleSendMessage = (e) => {
+        e.preventDefault()
         if (messageContent.length === 0){
             return;
         }
@@ -29,29 +34,30 @@ function MessageWindow (props){
             const data = await response.json();
             setMessages(data)
             setTimeout(() => {
-                bottomRef.current?.scrollIntoView({
+                bottomRef.current.scrollIntoView({
                 behavior: 'smooth'
             });
             });
         } catch (error) {
         }
     }
+    // useEffect(() => {
+    //     // 👇️ scroll to bottom every time messages change
+    //     bottomRef.current?.scrollIntoView({behavior: 'smooth'});
+    // }, [messages]);
+
+
     useEffect(() => {
         const fetchData = async () => {
             // Initialization code
             await getMessages()
-            //bottomRef.current?.scrollIntoView({behavior: 'smooth'});
-            //ReactDOM.render(<div />, document.getElementById('message-window'));
+
         };
         fetchData().then(r => {});
 
         return () => {
         };
     }, [props.contact,props.temp]);
-    // useEffect(() => {
-    //     // 👇️ scroll to bottom every time messages change
-    //     bottomRef.current?.scrollIntoView({behavior: 'smooth'});
-    // }, [messages]);
 
     return (
         <>
@@ -59,7 +65,7 @@ function MessageWindow (props){
             <div className="row" id="message_placeholder">
                 <div className="col col-md-12" id="message_container">
                     <div id="message-window">
-                        {props.contact !== null ? messages.length > 0 ? messages.slice().reverse().map((message, index) => (
+                        {props.contact !== null ? messages.length > 0 ? messages.map((message, index) => (
                             <Message key={index}  msg={message} sender={message.sender.username === props.contact.user.username }/>
                         )): "" : ""}
                         <div id="bottom-ref-id" ref={bottomRef} />
@@ -67,11 +73,13 @@ function MessageWindow (props){
                 </div>
             </div>
         </div>
-        <div className="input-group mb-3" id="chat-insert-box">
-            <input type="text" className="form-control" id="inputField" placeholder="Enter your message here..." value={messageContent} onChange={
-                (event) => setMessageContent(event.target.value)}/>
-            <button className="btn btn-outline-secondary" type="button" id="button-addon2"  onClick={handleSendMessage} >Send</button>
-        </div>
+            <form  onSubmit={handleSendMessage} >
+                <div className="input-group mb-3" id="chat-insert-box">
+                    <input type="text" className="form-control" id="inputField" placeholder="Enter your message here..." value={messageContent} onChange={
+                        (event) => setMessageContent(event.target.value)}/>
+                    <button className="btn btn-outline-secondary" type="submit" id="button-addon2"  onClick={handleSendMessage} >Send</button>
+                </div>
+            </form>
         </>
     );
 }

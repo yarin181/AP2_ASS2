@@ -5,6 +5,8 @@ import {Navigate} from "react-router-dom";
 import ContactsSide from "./ContactsSide";
 import ChatSide from "./ChatSide";
 import {Alert} from "react-bootstrap";
+import io from "socket.io-client";
+
 
 
 
@@ -17,10 +19,14 @@ function Chat(props){
     const [connectUser,setConnectUser]=useState({})
     // const [users, setUsers]=useState({})
     const [contactsList,setContactsList] = useState([]);
+    const socket = io("http://localhost:5000");
+    const [newMessageSent,setNewMessageSent]=useState()
+    const [numOfSocketMessages,setNumOfSocketMessages]=useState(0)
     function handleLogOut() {
         props.setIsConnected(false)
         setLogOut(true);
     }
+    //getting the user information
     async function getUser() {
         const token= props.token;
         const url = `http://localhost:5000/api/Users/${props.currentUser.username}`;
@@ -37,14 +43,36 @@ function Chat(props){
             }
 
             const data = await response.json();
-            //console.log('my data: ', data);
+            // console.log('my data: ', data);
             setConnectUser(data)
+            await initializeSocket(data.username)
         } catch (error) {
             console.error('Error:', error.message);
+            handleLogOut()
         }
     }
 
+    function sortContacts(data){
 
+        data = data.sort((a, b) => {
+            if(a.lastMessage !== null && b.lastMessage !== null){
+                const dateA = new Date(a.lastMessage.created);
+                const dateB = new Date(b.lastMessage.created);
+                if (dateA.getTime() > dateB.getTime()) {
+                    return -1;
+                }
+            }else if(a.lastMessage !== null && b.lastMessage === null){
+                return -1;
+            }else if(a.lastMessage === null && b.lastMessage !== null) {
+                return 1;
+            }
+        });
+        setContactsList(data)
+
+
+    }
+
+    //getting the chats of the user
     async function getUsersWithToken() {
         const token= props.token;
         // console.log("this is the token: ",token)
@@ -54,7 +82,8 @@ function Chat(props){
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${token}` // Add the token as an 'Authorization' header
+                    'Authorization': `Bearer ${token}`, // Add the token as an 'Authorization' header
+                    // 'Content-Type': 'application/json'
                 }
             });
 
@@ -63,10 +92,12 @@ function Chat(props){
             }
 
             const data = await response.json();
-            //console.log('Users:', data);
+            console.log('Users: ', data);
             setContactsList(data)
+            sortContacts(data)
         } catch (error) {
             console.error('Error:', error.message);
+            handleLogOut()
         }
     }
     async function postContact(newUser){
@@ -83,13 +114,15 @@ function Chat(props){
             });
             if (response.ok) {
                 const data = await response.json();
+
                 setContact(data)
-                //console.log(data);
+                console.log("the user data", data);
                 return 1
             } else if(response.status === 400){
-                handleError("user doesn't exist");
+                handleError("invalid username");
             }else{
                 console.error('Request failed');
+                handleLogOut()
                 return 0
             }
         } catch (error) {
@@ -119,11 +152,49 @@ function Chat(props){
             }
         } catch (error) {
             console.error(error);
+            handleLogOut()
             return 0
         }
     }
+    // async function getChat(id) {
+    //     const token = props.token;
+    //     // console.log("this is the token: ",token)
+    //     const url = `http://localhost:5000/api/Chats/${id}`;
+    //
+    //     try {
+    //         const response = await fetch(url, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'Authorization': `Bearer ${token}`, // Add the token as an 'Authorization' header
+    //                 // 'Content-Type': 'application/json'
+    //             }
+    //         });
+    //
+    //         if (!response.ok) {
+    //             throw new Error(`HTTP error! Status: ${response.status}`);
+    //         }
+    //         const data = await response.json();
+    //         console.log("new contact: ", data)
+    //         console.log("contact list before: ", contactsList)
+    //         // setContactsList([...contactsList,data])
+    //         // console.log("contact list before: ", contactsList)
+    //
+    //     } catch (error) {
+    //         console.error('Error:', error.message);
+    //     }
+    // }
+
+
+
+    // const connectUser = {
+    //     username: props.currentUser.username,
+    //     password: props.currentUser.password,
+    //     displayName: props.currentUser.displayName,
+    //     profilePic : props.currentUser.image
+    // }
 
     const [currentContact, setContact] = useState('');
+
 
     const handleItemClick = (ContactInfo) => {
         setContact(ContactInfo);
@@ -139,6 +210,7 @@ function Chat(props){
           if (validContact) {
               await getUsersWithToken();
           }
+          // setContactsList([...contactsList, newContact]);
 
       };
     const handleError = (errorMsg) =>{
@@ -146,20 +218,66 @@ function Chat(props){
         setShowAlert(true);
         setTimeout(() =>setShowAlert(false), 3000);
     }
+    socket.on('message', async (data) => {
+        console.log("message recived")
+        // getUsersWithToken();
+        // setTemp(temp+1)
+        await setNumOfSocketMessages(data.num)
+    });
+    function sendOnSocket(username){
+        // console.log('messageSent',username)
+        socket.emit('messageSent',username)
+    }
     const addMessage = async (newMsg, id) => {
         const msgJson= {msg:newMsg}
+        // console.log(newMsg)
+        // console.log(id)
         await postMessage( msgJson, id)
+        // console.log("this is  contact: ",currentContact)
+        sendOnSocket(currentContact.user.username)
         await getUsersWithToken();
         setTemp(temp+1)
+        // const index = contactsList.findIndex(contact => contact.name === name);
+        // if (index !== -1){
+        //     const updatedContact = {
+        //         ...contactsList[index],
+        //         chat: [...contactsList[index].chat, newMsg]
+        //     };
+        //     const updatedContactsList = [...contactsList];
+        //     updatedContactsList[index] = updatedContact;
+        //     setContactsList(updatedContactsList);
+        //     console.log(updatedContactsList)
+        // }
     };
 
     useEffect(() => {
+        const messageRecived =async () => {
+            console.log("in use effect: ", numOfSocketMessages)
+            await getUsersWithToken();
+            await setTemp(temp + 1)
+        }
+        messageRecived().then(r => {});
+
+        return () => {
+            // Cleanup code (if needed)
+        };
+
+    }, [numOfSocketMessages]);
+    async function initializeSocket(username){
+        console.log("myself: " ,username)
+        await socket.emit('join',username)
+    }
+
+    useEffect(() => {
+
         const fetchData = async () => {
             // Initialization code
             await getUser();
             await getUsersWithToken();
-            console.log("user token - ",props.token)
-            console.log("contacts: ",contactsList)
+            // console.log("myself: " ,connectUser.username)
+            // await socket.emit('join',connectUser.username)
+            // console.log("user token - ",props.token)
+            // console.log("contacts: ",contactsList)
         };
 
         // Call the async function immediately
