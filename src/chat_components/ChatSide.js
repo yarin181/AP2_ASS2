@@ -5,6 +5,8 @@ import React, {useState} from "react";
 
 
 function ChatSide({currentContact,addMessage,token,temp}){
+
+
     return(
         <>
             <div className="row" id="chat-bar">

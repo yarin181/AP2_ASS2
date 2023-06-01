@@ -72,7 +72,6 @@ function RegisterPage(props) {
 
     //handling every input change
     const handleImageChange = (e) => {
-
         if (e.target.files && e.target.files[0]) {
             const reader = new FileReader();
             reader.onload = (event) => {

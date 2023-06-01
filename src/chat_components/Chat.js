@@ -5,6 +5,8 @@ import {Navigate} from "react-router-dom";
 import ContactsSide from "./ContactsSide";
 import ChatSide from "./ChatSide";
 import {Alert} from "react-bootstrap";
+import io from "socket.io-client";
+
 
 
 
@@ -17,6 +19,9 @@ function Chat(props){
     const [connectUser,setConnectUser]=useState({})
     // const [users, setUsers]=useState({})
     const [contactsList,setContactsList] = useState([]);
+    const socket = io("http://localhost:5000");
+    const [newMessageSent,setNewMessageSent]=useState()
+    const [numOfSocketMessages,setNumOfSocketMessages]=useState(0)
     function handleLogOut() {
         props.setIsConnected(false)
         setLogOut(true);
@@ -46,6 +51,26 @@ function Chat(props){
         }
     }
 
+    function sortContacts(data){
+
+        data = data.sort((a, b) => {
+            if(a.lastMessage !== null && b.lastMessage !== null){
+                const dateA = new Date(a.lastMessage.created);
+                const dateB = new Date(b.lastMessage.created);
+                if (dateA.getTime() > dateB.getTime()) {
+                    return -1;
+                }
+            }else if(a.lastMessage !== null && b.lastMessage === null){
+                return -1;
+            }else if(a.lastMessage === null && b.lastMessage !== null) {
+                return 1;
+            }
+        });
+        setContactsList(data)
+
+
+    }
+
     //getting the chats of the user
     async function getUsersWithToken() {
         const token= props.token;
@@ -68,6 +93,7 @@ function Chat(props){
             const data = await response.json();
             console.log('Users: ', data);
             setContactsList(data)
+            sortContacts(data)
         } catch (error) {
             console.error('Error:', error.message);
             handleLogOut()
@@ -92,7 +118,7 @@ function Chat(props){
                 console.log("the user data", data);
                 return 1
             } else if(response.status === 400){
-                handleError("user doesn't exist");
+                handleError("invalid username");
             }else{
                 console.error('Request failed');
                 handleLogOut()
@@ -191,22 +217,59 @@ function Chat(props){
         setShowAlert(true);
         setTimeout(() =>setShowAlert(false), 3000);
     }
+    socket.on('message', async (data) => {
+        console.log("message recived")
+        // getUsersWithToken();
+        // setTemp(temp+1)
+        await setNumOfSocketMessages(data.num)
+    });
+    function sendOnSocket(){
+        socket.emit('messageSent')
+    }
     const addMessage = async (newMsg, id) => {
         const msgJson= {msg:newMsg}
         // console.log(newMsg)
         // console.log(id)
         await postMessage( msgJson, id)
+        sendOnSocket()
         await getUsersWithToken();
         setTemp(temp+1)
+        // const index = contactsList.findIndex(contact => contact.name === name);
+        // if (index !== -1){
+        //     const updatedContact = {
+        //         ...contactsList[index],
+        //         chat: [...contactsList[index].chat, newMsg]
+        //     };
+        //     const updatedContactsList = [...contactsList];
+        //     updatedContactsList[index] = updatedContact;
+        //     setContactsList(updatedContactsList);
+        //     console.log(updatedContactsList)
+        // }
     };
 
     useEffect(() => {
+        const messageRecived =async () => {
+            console.log("in use effect: ", numOfSocketMessages)
+            await getUsersWithToken();
+            await setTemp(temp + 1)
+        }
+        messageRecived().then(r => {});
+
+        return () => {
+            // Cleanup code (if needed)
+        };
+
+    }, [numOfSocketMessages]);
+
+    useEffect(() => {
+
         const fetchData = async () => {
             // Initialization code
             await getUser();
             await getUsersWithToken();
-            console.log("user token - ",props.token)
-            console.log("contacts: ",contactsList)
+            await socket.emit('join')
+            // console.log("user token - ",props.token)
+            // console.log("contacts: ",contactsList)
         };
 
         // Call the async function immediately

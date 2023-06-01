@@ -102,6 +102,7 @@ const addChat = async (username, newContact) => {
 };
 
 
+
 //get contact by id (GET/api/chat/{id})
 const getChatByID = async (id,connectUser) => {
     const chat = await Chats.findOne({ "id": id });
