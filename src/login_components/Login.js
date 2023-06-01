@@ -22,7 +22,7 @@ function Login(props){
 
     const [usernameClassContent,setUsernameClassContent] = useState('form-control log-in-input')
     const [passwordClassContent,setPasswordClassContent] = useState('form-control log-in-input')
-    const socket = io("http://localhost:5000");
+    // const socket = io("http://localhost:5000");
 
 
 

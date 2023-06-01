@@ -1,5 +1,5 @@
-// const connectedUsers = new Map();
-const connectedUsers = []
+const connectedUsers = new Map();
+// const connectedUsers = []
 // const {io} = require("socket.io-client");
 const {useState} = require("react");
 // const {io} =require("../app")
@@ -56,19 +56,29 @@ function socketOnConnection (io){
        // if(!connectedUsers.has(socket.id)){
        //     connectedUsers.
        // }
-        socket.on('join',() => {
-            if(!connectedUsers.includes(socket.id)){
-                connectedUsers.push(socket.id)
+        socket.on('join',(data) => {
+            if(!connectedUsers.has(socket.id)){
+                connectedUsers.set( data , socket.id)
+                console.log("user joined: ",data," ",connectedUsers.get(data))
                 socket.join(10)
             }
+            // if(!connectedUsers.includes(socket.id)){
+            //     connectedUsers.push(socket.id)
+            //     socket.join(10)
+            // }
         });
-        socket.on('messageSent',() => {
+        socket.on('messageSent',(data) => {
             // socket.join(10)
-            for (let i = 0; i <connectedUsers.length; i++) {
-                // console.log("send to this: ",connectedUsers[i])
-               io.to(connectedUsers[i]).emit('message',{ num : numOfMessages })
-               // socket.to(connectedUsers[i]).emit('message',{ num : numOfMessages })
+            if(connectedUsers.get(data) !== undefined){
+                console.log("send to him: ",connectedUsers.get(data))
+                io.to(connectedUsers.get(data)).emit('message',{ num : numOfMessages })
             }
+
+            // for (let i = 0; i <connectedUsers.length; i++) {
+            //     // console.log("send to this: ",connectedUsers[i])
+            //    io.to(connectedUsers[i]).emit('message',{ num : numOfMessages })
+            //    // socket.to(connectedUsers[i]).emit('message',{ num : numOfMessages })
+            // }
             // socket.broadcast.emit('message',{ num : 'numOfMessages' })
             // io.to(10).emit('message',{ num : numOfMessages })
            numOfMessages++
@@ -77,18 +87,23 @@ function socketOnConnection (io){
         // Remove the user from connectedUsers map when they disconnect
         socket.on('disconnect', () => {
 
-            const index = connectedUsers.indexOf(socket.id);
-            if (index > -1) {
-                connectedUsers.splice(index, 1);
+            for (let [key, value] of connectedUsers.entries()) {
+                if (value === socket.id) {
+                    console.log(key, "disconnected")
+                   connectedUsers.delete(key);
+                }
             }
+            // const index = connectedUsers.indexOf(socket.id);
+            // if (index > -1) {
+            //     connectedUsers.splice(index, 1);
+            // }
             // console.log('A user disconnected');
-            // let eraseUser
             // for (let [key, value] of connectedUsers.entries()) {
             //     if (value === socket.id) {
-            //         eraseUser = key;
+            //         connectedUsers.pop(key);
             //     }
             // }
-            // connectedUsers.pop(eraseUser);
+            //
         });
 
     });

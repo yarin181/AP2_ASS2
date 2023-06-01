@@ -34,7 +34,7 @@ function MessageWindow (props){
             const data = await response.json();
             setMessages(data)
             setTimeout(() => {
-                bottomRef.current?.scrollIntoView({
+                bottomRef.current.scrollIntoView({
                 behavior: 'smooth'
             });
             });

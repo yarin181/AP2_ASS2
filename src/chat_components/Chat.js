@@ -43,8 +43,9 @@ function Chat(props){
             }
 
             const data = await response.json();
-            //console.log('my data: ', data);
+            // console.log('my data: ', data);
             setConnectUser(data)
+            await initializeSocket(data.username)
         } catch (error) {
             console.error('Error:', error.message);
             handleLogOut()
@@ -223,15 +224,17 @@ function Chat(props){
         // setTemp(temp+1)
         await setNumOfSocketMessages(data.num)
     });
-    function sendOnSocket(){
-        socket.emit('messageSent')
+    function sendOnSocket(username){
+        // console.log('messageSent',username)
+        socket.emit('messageSent',username)
     }
     const addMessage = async (newMsg, id) => {
         const msgJson= {msg:newMsg}
         // console.log(newMsg)
         // console.log(id)
         await postMessage( msgJson, id)
-        sendOnSocket()
+        // console.log("this is  contact: ",currentContact)
+        sendOnSocket(currentContact.user.username)
         await getUsersWithToken();
         setTemp(temp+1)
         // const index = contactsList.findIndex(contact => contact.name === name);
@@ -260,6 +263,10 @@ function Chat(props){
         };
 
     }, [numOfSocketMessages]);
+    async function initializeSocket(username){
+        console.log("myself: " ,username)
+        await socket.emit('join',username)
+    }
 
     useEffect(() => {
 
@@ -267,7 +274,8 @@ function Chat(props){
             // Initialization code
             await getUser();
             await getUsersWithToken();
-            await socket.emit('join')
+            // console.log("myself: " ,connectUser.username)
+            // await socket.emit('join',connectUser.username)
             // console.log("user token - ",props.token)
             // console.log("contacts: ",contactsList)
         };
