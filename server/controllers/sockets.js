@@ -11,7 +11,6 @@ function assignNewSocket(username,io){
     // console.log("assigning new socket")
     io.on('connection', (socket) => {
         if (!connectedUsers.has(username)){
-            console.log("this is the username ",username)
             connectedUsers.set(username, socket.id);
         }else{
             // console.log("try to add to the sockets a user that already there")
@@ -19,8 +18,6 @@ function assignNewSocket(username,io){
     });
 }
 function sendWithSocket(recipient,io){
-    console.log("send in socket to: ", recipient)
-    console.log("connected to chat: ")
     for (let [key, value] of connectedUsers) {
         console.log(`Key: ${key}, Value: ${value}`);
     }

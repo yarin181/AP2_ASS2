@@ -17,10 +17,8 @@ function Chat(props){
     const [showAlert, setShowAlert] = useState(false);
     const [errorMessage,setErrorMessage] = useState('')
     const [connectUser,setConnectUser]=useState({})
-    // const [users, setUsers]=useState({})
     const [contactsList,setContactsList] = useState([]);
     const socket = io("http://localhost:5000");
-    const [newMessageSent,setNewMessageSent]=useState()
     const [numOfSocketMessages,setNumOfSocketMessages]=useState(0)
     function handleLogOut() {
         props.setIsConnected(false)
@@ -66,6 +64,7 @@ function Chat(props){
             }else if(a.lastMessage === null && b.lastMessage !== null) {
                 return 1;
             }
+            return 1;
         });
         setContactsList(data)
 
@@ -143,7 +142,7 @@ function Chat(props){
                 body: JSON.stringify(newMsg)
             });
             if (response.ok) {
-                const data = response.json();
+                //const data = response.json();
                 //console.log(data);
                 return 1
             } else {

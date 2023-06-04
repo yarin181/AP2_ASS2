@@ -1,7 +1,7 @@
 
-import img from "../photos/robo2.jpg";
+//import img from "../photos/robo2.jpg";
 import MessageWindow from "./MessageWindow";
-import React, {useState} from "react";
+import React from "react";
 
 
 function ChatSide({currentContact,addMessage,token,temp}){

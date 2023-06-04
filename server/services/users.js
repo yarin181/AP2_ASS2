@@ -15,11 +15,13 @@ const addUser = async (username, password, displayName, profilePic) => {
         await newUser.save();
 
         // Return the newly created user document
-        return {
-            "username" : username,
-            "displayName" : displayName,
-            "profilePic" : profilePic
-        };
+        return 200;
+
+        // {
+        //     "username" : username,
+        //     "displayName" : displayName,
+        //     "profilePic" : profilePic
+        // };
     } catch (error) {
         // Handle any errors that occurred during the process, user is already exist
         return 409;

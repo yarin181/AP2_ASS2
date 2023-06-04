@@ -4,7 +4,6 @@ const {io} = require("socket.io-client");
 
 
 const getUserContactsList = async (req,res) =>{
-   //console.log(await service.getChats(req.headers.connectedUser));
    res.json(await service.getChats(req.headers.connectedUser));
 };
 const addContact = async (req,res) =>{

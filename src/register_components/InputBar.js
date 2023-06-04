@@ -1,4 +1,4 @@
-import React, {useRef ,useState } from "react";
+import React, {useState} from "react";
 import "./InputBar.css"
 
 function InputBar({ id ,string,Hide=false,onChange,validPassword=false,setAlert, submitAlert =false}) {

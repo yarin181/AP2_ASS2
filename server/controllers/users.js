@@ -12,7 +12,7 @@ const registerUser = async (req,res) =>{
       return res.sendStatus(409);
    }
    else{
-      return res.status(200).send(status);
+      return res.sendStatus(200)
    }
 };
 
