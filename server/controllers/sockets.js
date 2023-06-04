@@ -1,5 +1,4 @@
 const connectedUsers = new Map();
-const {useState} = require("react");
 
 function assignNewSocket(username,io){
     io.on('connection', (socket) => {
