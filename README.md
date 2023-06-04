@@ -4,9 +4,9 @@
 The Chat Application is a web-based application that allows users to log in, sign up, and engage in real-time chat conversations.<br /> 
 It consists of three main pages: Log In page, Sign Up page, and Chat page.<br /> 
 **How to run the Project?<br />**
-* Change to the app directory: cd chat_app
-* Install dependencies: npm install
-* Start the development server: npm start 
+* write the command line "npm install"
+* run the server
+* wrute in the url:"http://localhost:5000"
 <br /> 
 
 **Log In Page:<br />**
