@@ -6,6 +6,7 @@ import ContactsSide from "./ContactsSide";
 import ChatSide from "./ChatSide";
 import {Alert} from "react-bootstrap";
 import io from "socket.io-client";
+const socket = io("http://localhost:5000");
 
 
 
@@ -18,8 +19,8 @@ function Chat(props){
     const [errorMessage,setErrorMessage] = useState('')
     const [connectUser,setConnectUser]=useState({})
     const [contactsList,setContactsList] = useState([]);
-    const socket = io("http://localhost:5000");
-    const [numOfSocketMessages,setNumOfSocketMessages]=useState(0)
+    const [newMessageSent,setNewMessageSent]=useState()
+    const [numOfSocketMessages,setNumOfSocketMessages]=useState({})
     function handleLogOut() {
         props.setIsConnected(false)
         setLogOut(true);
@@ -196,6 +197,7 @@ function Chat(props){
 
 
     const handleItemClick = (ContactInfo) => {
+        console.log(ContactInfo)
         setContact(ContactInfo);
         // if (ContactInfo > 0){
         //     let messageContainer = document.getElementById("message-container");
@@ -217,15 +219,10 @@ function Chat(props){
         setShowAlert(true);
         setTimeout(() =>setShowAlert(false), 3000);
     }
-    socket.on('message', async (data) => {
-        console.log("message recived")
-        // getUsersWithToken();
-        // setTemp(temp+1)
-        await setNumOfSocketMessages(data.num)
-    });
+
     function sendOnSocket(username){
         // console.log('messageSent',username)
-        socket.emit('messageSent',username)
+        socket.emit('messageSent',connectUser.username,username)
     }
     const addMessage = async (newMsg, id) => {
         const msgJson= {msg:newMsg}
@@ -251,9 +248,17 @@ function Chat(props){
 
     useEffect(() => {
         const messageRecived =async () => {
-            console.log("in use effect: ", numOfSocketMessages)
+            // console.log("in use effect: ", numOfSocketMessages)
             await getUsersWithToken();
-            await setTemp(temp + 1)
+            console.log("the cuurent contect: ",currentContact)
+            if(currentContact !== ''){
+                if(currentContact.user !== ''){
+                    if(currentContact.user.username === numOfSocketMessages.from){
+                        await setTemp(temp + 1)
+                    }
+                }
+            }
+
         }
         messageRecived().then(r => {});
 
@@ -268,15 +273,13 @@ function Chat(props){
     }
 
     useEffect(() => {
-
         const fetchData = async () => {
             // Initialization code
             await getUser();
             await getUsersWithToken();
-            // console.log("myself: " ,connectUser.username)
-            // await socket.emit('join',connectUser.username)
-            // console.log("user token - ",props.token)
-            // console.log("contacts: ",contactsList)
+            socket.on('message', async (data) => {
+                await setNumOfSocketMessages({num: data.num,from : data.sender})
+            });
         };
 
         // Call the async function immediately
