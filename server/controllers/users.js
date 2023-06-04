@@ -16,9 +16,6 @@ const registerUser = async (req,res) =>{
    }
 };
 
-
-
-
 const getUserData = async (req,res) =>{
    const user = await service.getUserDetails(req.params.username);
    //call to the addUser method in services using POST

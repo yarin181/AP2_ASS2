@@ -1,5 +1,3 @@
-const { UsersPassName, UsersPass, Users} = require('../models/users.js');
-
 const {usersData} = require('../models/users.js');
 const addUser = async (username, password, displayName, profilePic) => {
     try {
@@ -16,12 +14,6 @@ const addUser = async (username, password, displayName, profilePic) => {
 
         // Return the newly created user document
         return 200;
-
-        // {
-        //     "username" : username,
-        //     "displayName" : displayName,
-        //     "profilePic" : profilePic
-        // };
     } catch (error) {
         // Handle any errors that occurred during the process, user is already exist
         return 409;
@@ -38,7 +30,6 @@ const getUserDetails = async (username) => {
     }
 
 };
-
 
 //check if the username found when user logIn
 const validUserPassword = async (username, password) => {

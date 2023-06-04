@@ -23,7 +23,6 @@ function RegisterPage(props) {
     //variable for the password validity
     const [validPassword, setIsValid] = useState(false);
     //variable for the ConfirmPassword
-    //const [isConfirm, setIsConfirm] = useState(false);
     const [isConfirm, setIsConfirm] = useState(false);
     //these are for alerting when the input is in valid
     const [alertUserName,setAlertUserName] = useState(false)
@@ -120,34 +119,6 @@ function RegisterPage(props) {
             setImageAlertMessage('Please upload a valid image')
         }
     }
-
-    // async function addUser(newUser){
-    //     try {
-    //         // console.log(newUser);
-    //         const response = await fetch('http://localhost:5000/api/Users', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify(newUser)
-    //         });
-    //         if (response.body===null) {
-    //             const data = await response.json();
-    //             console.log(data);
-    //             console.log("here")
-    //             return 1
-    //         } else {
-    //             if (response.status === 409){
-    //                 setShowAlert(true)
-    //             }else{
-    //                 throw new Error('Request failed');
-    //             }
-    //             return 0
-    //         }
-    //     } catch (error) {
-    //         return 0
-    //     }
-    // }
     async function addUser(newUser){
         try {
             const response = await fetch('http://localhost:5000/api/users', {
@@ -157,7 +128,6 @@ function RegisterPage(props) {
                 },
                 body: JSON.stringify(newUser)
             });
-            console.log(response);
             if (response.status === 409) {
                 setShowAlert(true)
                 setTimeout(() =>setShowAlert(false), 3000);

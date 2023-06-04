@@ -1,7 +1,4 @@
 const service = require('../services/chat.js')
-const {getUsername} = require('../services/token.js');
-const {io} = require("socket.io-client");
-
 
 const getUserContactsList = async (req,res) =>{
    res.json(await service.getChats(req.headers.connectedUser));

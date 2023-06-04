@@ -8,9 +8,6 @@ import {Alert} from "react-bootstrap";
 import io from "socket.io-client";
 const socket = io("http://localhost:5000");
 
-
-
-
 function Chat(props){
     const [temp, setTemp]=useState(0)
 
@@ -42,7 +39,6 @@ function Chat(props){
             }
 
             const data = await response.json();
-            // console.log('my data: ', data);
             setConnectUser(data)
             await initializeSocket(data.username)
         } catch (error) {
@@ -68,14 +64,11 @@ function Chat(props){
             return 1;
         });
         setContactsList(data)
-
-
     }
 
     //getting the chats of the user
     async function getUsersWithToken() {
         const token= props.token;
-        // console.log("this is the token: ",token)
         const url = 'http://localhost:5000/api/Chats';
 
         try {
@@ -92,7 +85,6 @@ function Chat(props){
             }
 
             const data = await response.json();
-            console.log('Users: ', data);
             setContactsList(data)
             sortContacts(data)
         } catch (error) {
@@ -103,7 +95,6 @@ function Chat(props){
     async function postContact(newUser){
         const token= props.token;
         try {
-            // console.log( JSON.stringify(newUser));
             const response = await fetch('http://localhost:5000/api/Chats', {
                 method: 'POST',
                 headers: {
@@ -116,7 +107,6 @@ function Chat(props){
                 const data = await response.json();
 
                 setContact(data)
-                console.log("the user data", data);
                 return 1
             } else if(response.status === 400){
                 handleError("invalid username");
@@ -133,7 +123,6 @@ function Chat(props){
     async function postMessage(newMsg,id){
         const token= props.token;
         try {
-            // console.log(JSON.stringify(newMsg) );
             const response = await fetch(`http://localhost:5000/api/Chats/${id}/Messages`, {
                 method: 'POST',
                 headers: {
@@ -143,8 +132,6 @@ function Chat(props){
                 body: JSON.stringify(newMsg)
             });
             if (response.ok) {
-                //const data = response.json();
-                //console.log(data);
                 return 1
             } else {
                 console.error('Request failed');
@@ -156,53 +143,10 @@ function Chat(props){
             return 0
         }
     }
-    // async function getChat(id) {
-    //     const token = props.token;
-    //     // console.log("this is the token: ",token)
-    //     const url = `http://localhost:5000/api/Chats/${id}`;
-    //
-    //     try {
-    //         const response = await fetch(url, {
-    //             method: 'GET',
-    //             headers: {
-    //                 'Authorization': `Bearer ${token}`, // Add the token as an 'Authorization' header
-    //                 // 'Content-Type': 'application/json'
-    //             }
-    //         });
-    //
-    //         if (!response.ok) {
-    //             throw new Error(`HTTP error! Status: ${response.status}`);
-    //         }
-    //         const data = await response.json();
-    //         console.log("new contact: ", data)
-    //         console.log("contact list before: ", contactsList)
-    //         // setContactsList([...contactsList,data])
-    //         // console.log("contact list before: ", contactsList)
-    //
-    //     } catch (error) {
-    //         console.error('Error:', error.message);
-    //     }
-    // }
-
-
-
-    // const connectUser = {
-    //     username: props.currentUser.username,
-    //     password: props.currentUser.password,
-    //     displayName: props.currentUser.displayName,
-    //     profilePic : props.currentUser.image
-    // }
-
     const [currentContact, setContact] = useState('');
 
-
     const handleItemClick = (ContactInfo) => {
-        console.log(ContactInfo)
         setContact(ContactInfo);
-        // if (ContactInfo > 0){
-        //     let messageContainer = document.getElementById("message-container");
-        //     messageContainer.scrollTop = messageContainer.scrollHeight;
-        // }
     };
 
       const addContact = async (newContact) => {
@@ -211,7 +155,6 @@ function Chat(props){
           if (validContact) {
               await getUsersWithToken();
           }
-          // setContactsList([...contactsList, newContact]);
 
       };
     const handleError = (errorMsg) =>{
@@ -219,38 +162,24 @@ function Chat(props){
         setShowAlert(true);
         setTimeout(() =>setShowAlert(false), 3000);
     }
+    // socket.on('message', async (data) => {
+    //     await setNumOfSocketMessages(data.num)
+    // });
 
     function sendOnSocket(username){
-        // console.log('messageSent',username)
         socket.emit('messageSent',connectUser.username,username)
     }
     const addMessage = async (newMsg, id) => {
         const msgJson= {msg:newMsg}
-        // console.log(newMsg)
-        // console.log(id)
         await postMessage( msgJson, id)
-        // console.log("this is  contact: ",currentContact)
         sendOnSocket(currentContact.user.username)
         await getUsersWithToken();
         setTemp(temp+1)
-        // const index = contactsList.findIndex(contact => contact.name === name);
-        // if (index !== -1){
-        //     const updatedContact = {
-        //         ...contactsList[index],
-        //         chat: [...contactsList[index].chat, newMsg]
-        //     };
-        //     const updatedContactsList = [...contactsList];
-        //     updatedContactsList[index] = updatedContact;
-        //     setContactsList(updatedContactsList);
-        //     console.log(updatedContactsList)
-        // }
     };
 
     useEffect(() => {
         const messageRecived =async () => {
-            // console.log("in use effect: ", numOfSocketMessages)
             await getUsersWithToken();
-            console.log("the cuurent contect: ",currentContact)
             if(currentContact !== ''){
                 if(currentContact.user !== ''){
                     if(currentContact.user.username === numOfSocketMessages.from){
@@ -263,12 +192,10 @@ function Chat(props){
         messageRecived().then(r => {});
 
         return () => {
-            // Cleanup code (if needed)
         };
 
     }, [numOfSocketMessages]);
     async function initializeSocket(username){
-        console.log("myself: " ,username)
         await socket.emit('join',username)
     }
 
