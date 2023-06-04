@@ -43,7 +43,6 @@ function RegisterPage(props) {
     const [showAlert, setShowAlert]=useState(false)
     const [errorMessage,setErrorMessage]=useState("this user already exist")
 
-    // const inputRef = useRef(null);
     //the function validate the uploaded pic
     function passwordValidation(password){
         const passwordRegex = /^(?=.*\d)(?=.*[A-Z]).{8,16}$/
@@ -51,14 +50,13 @@ function RegisterPage(props) {
 
     }
 
-    //the function validate the password
-    function picValidation(picFileName){
-        // const regex = /([^\\s]+(\.(?:jpe?g|png|gif|bmp|JPG))$)/;
-        // return (regex.test(picFileName));
-        return true
-        //setIsValid(passwordRegex.test(picFileName));
+    function picValidation(fileName) {
+        const validExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg'];
+        const fileExtension = fileName.substring(fileName.lastIndexOf('.'));
+        return validExtensions.includes(fileExtension.toLowerCase());
     }
-      //the function confirmPassword
+
+    //the function confirmPassword
     function passwordConfirm(confirmPassword){
        if((confirmPassword === password) && (validPassword)){
            setIsConfirm(true);
