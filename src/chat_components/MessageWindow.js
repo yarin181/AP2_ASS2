@@ -1,14 +1,13 @@
 import Message from "./Message"
 
 import React, {useEffect, useRef, useState} from "react";
-import ReactDOM from 'react-dom';
+//import ReactDOM from 'react-dom';
 
 function MessageWindow (props){
     const [messageContent, setMessageContent] = useState('');
     const [messages,setMessages]=useState({})
     const bottomRef = useRef(null);
 
-    // const [currentChat, setCurrentChat] = useState()
     const handleSendMessage = (e) => {
         e.preventDefault()
         if (messageContent.length === 0){
@@ -32,7 +31,7 @@ function MessageWindow (props){
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const data = await response.json();
-            setMessages(data)
+            setMessages(data.reverse())
             setTimeout(() => {
                 bottomRef.current.scrollIntoView({
                 behavior: 'smooth'
@@ -41,11 +40,6 @@ function MessageWindow (props){
         } catch (error) {
         }
     }
-    // useEffect(() => {
-    //     // 👇️ scroll to bottom every time messages change
-    //     bottomRef.current?.scrollIntoView({behavior: 'smooth'});
-    // }, [messages]);
-
 
     useEffect(() => {
         const fetchData = async () => {

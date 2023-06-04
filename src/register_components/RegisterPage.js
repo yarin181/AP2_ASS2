@@ -4,7 +4,7 @@ import placeholder from "../img/profile.png"
 import React, {useState} from "react";
 import InputBar from "./InputBar";
 import {Navigate} from "react-router-dom";
-import async from "async";
+//import async from "async";
 import {Alert} from "react-bootstrap";
 
 
@@ -104,7 +104,6 @@ function RegisterPage(props) {
 
     //check if the user is valid
     function checkUserValidity(){
-        return true
         return isConfirm && validPassword && (username !== '') && (displayName !== '') && (validImage);
     }
     function imageContent(x){

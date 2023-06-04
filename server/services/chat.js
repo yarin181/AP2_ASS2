@@ -231,7 +231,7 @@ const getMessages = async (id,connectUser) => {
                 "content": foundMsg.content
             });
         }
-        return chatArray;
+        return chatArray.reverse();
     }
     return null;
 

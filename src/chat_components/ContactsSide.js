@@ -1,7 +1,7 @@
 import friend from "../img/invite.png";
 import UserBar from "./UserBar";
 import React from "react";
-import img from "../photos/robo4.jpg";
+//import img from "../photos/robo4.jpg";
 import signout from "../img/sign-out.png";
 
 function ContactsSide({user,contactsList,handleItemClick,contact,handleLogOut,temp}){
