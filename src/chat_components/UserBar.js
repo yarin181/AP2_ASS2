@@ -1,11 +1,9 @@
 import LastMessageDetails from "./LastMessageDate";
 function UserBar(props){
-    // const {userInfo} = props;
     const handleClick = () => {
         props.onItemClick(props.userInfo);
     };
 
-    //console.log("user name : ",props.userInfo.user.displayName);
     return(
          <a className={props.contact.id === props.userInfo.id ? "list-group-item list-group-item-action active" : "list-group-item list-group-item-action" } aria-current="true" onClick={handleClick}>
         <div className="grid-container user-bar">
