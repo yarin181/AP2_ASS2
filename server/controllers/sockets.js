@@ -45,9 +45,11 @@ function sendWithSocket(recipient,io){
 }
 
 function socketOnConnection (io){
+
     let numOfMessages=1
     // const [numOfMessages,setNumOfMessages]=useState(1)
     io.on('connection', (socket) => {
+        console.log(socket.id)
         // console.log("connected")
 
        // if(!connectedUsers.has(socket.id)){
@@ -64,21 +66,15 @@ function socketOnConnection (io){
             //     socket.join(10)
             // }
         });
-        socket.on('messageSent',(data) => {
+        socket.on('messageSent',(from,to) => {
             // socket.join(10)
-            if(connectedUsers.get(data) !== undefined){
-                console.log("send to him: ",connectedUsers.get(data))
-                io.to(connectedUsers.get(data)).emit('message',{ num : numOfMessages })
+            if(connectedUsers.get(to) !== undefined){
+                console.log("send to him: ",connectedUsers.get(to))
+                io.to(connectedUsers.get(to)).emit('message',{ num : numOfMessages, sender: from })
             }
+            numOfMessages++
 
-            // for (let i = 0; i <connectedUsers.length; i++) {
-            //     // console.log("send to this: ",connectedUsers[i])
-            //    io.to(connectedUsers[i]).emit('message',{ num : numOfMessages })
-            //    // socket.to(connectedUsers[i]).emit('message',{ num : numOfMessages })
-            // }
-            // socket.broadcast.emit('message',{ num : 'numOfMessages' })
-            // io.to(10).emit('message',{ num : numOfMessages })
-           numOfMessages++
+
         });
 
         // Remove the user from connectedUsers map when they disconnect

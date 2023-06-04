@@ -4,7 +4,7 @@ import "./login_style.css"
 import {Navigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import React from "react";
-//import io from "socket.io-client";
+// import io from "socket.io-client";
 
 
 
@@ -77,32 +77,7 @@ function Login(props){
     }
 
 
-    useEffect(() => {
-        // socket.on("connect", () => {
-        //     console.log("Connected to WebSocket server");
-        // });
-        //
-        // socket.on("disconnect", () => {
-        //     console.log("Disconnected from WebSocket server");
-        // });
-        //
-        // socket.on("Hello", (data) => {
-        //     console.log("Received 'Hello' message:", data);
-        // });
-    //
-    //     socket.on("hi", () => {
-    //         console.log("Received 'hi' message");
-    //     });
-    //
-    //     socket.on("message", (msg) => {
-    //         console.log("Received message:", msg);
-    //     });
-    //
-    //     // Clean up the WebSocket connection when the component is unmounted
-    //     return () => {
-    //         socket.disconnect();
-    //     };
-    }, []);
+
 
    async function getToken(user) {
         //create the json user
