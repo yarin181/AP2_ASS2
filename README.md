@@ -11,9 +11,11 @@ Before running the server, make sure you have a MongoDB server running with the 
 - Connection String: "mongodb://localhost:27017"
 
 **How to run the Project?<br />**
-* write the command line "npm install"
-* run the server
-* write in the url:"http://localhost:5000"
+* Make sure the MongoDB server is running with the specified configuration.
+* Navigate to the server directory using the command line: `cd server`.
+* Install the dependents of the project `npm install`
+* Run the server by the command line `npm start`
+* Write in the url:"http://localhost:5000"
 <br /> 
 
 
