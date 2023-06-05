@@ -2,13 +2,22 @@
 # WINK - Chat Application 🗨💻
 ### ***Overview:***
 The Chat Application is a web-based application that allows users to log in, sign up, and engage in real-time chat conversations.<br /> 
-It consists of three main pages: Log In page, Sign Up page, and Chat page.<br /> 
+It consists of three main pages: Log In page, Sign Up page, and Chat page.<br />
+
+**MongoDB Server Configuration:**
+
+Before running the server, make sure you have a MongoDB server running with the following configuration:
+
+- Connection String: "mongodb://localhost:27017"
+
 **How to run the Project?<br />**
-* nevigate to the server dirctory by the command line: `cd server`
-* install the dependents of the project `npm install`
-* run the server by the command line `npm start`
-* write in the url:"http://localhost:5000"
+* Make sure the MongoDB server is running with the specified configuration.
+* Navigate to the server directory using the command line: `cd server`.
+* Install the dependents of the project `npm install`
+* Run the server by the command line `npm start`
+* Write in the url:"http://localhost:5000"
 <br /> 
+
 
 **Log In Page:<br />**
 The Login page is the entry point for users who have already registered for an account.<br />
